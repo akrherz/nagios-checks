@@ -25,7 +25,7 @@ def main():
     count = row[0]
     daycount = row[1]
 
-    if datetime.date.today().month in (5, 6, 7, 8, 9, 10):
+    if datetime.date.today().month in (4, 5, 6, 7, 8, 9, 10):
         print(
             ("OK - snowplows %s/%s |count=%s;2;1;0 daycount=%s;2;1;0")
             % (count, daycount, count, daycount)
