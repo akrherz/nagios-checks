@@ -76,9 +76,12 @@ def runner(hostname, feedtype):
 
     exitcode = 2
     msg = "LDM %s latency %.4fs" % (feedtype, min_latency)
-    if min_latency < 300:
+    thresholds = [300, 1200]
+    if feedtype == "CONDUIT":
+        thresholds = [600, 2400]
+    if min_latency < thresholds[0]:
         exitcode = 0
-    elif min_latency < 1200:
+    elif min_latency < thresholds[1]:
         exitcode = 1
     stats = "prods=%.0f;;;0; bytes=%.0fB;;;; latency=%.4fs;;;;" % (
         tot_prods,
