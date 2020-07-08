@@ -1,7 +1,6 @@
 """
-Make sure we have archived N0R so that things do not freak out!
+Make sure we have archived N0R/N0Q so that things do not freak out!
 """
-from __future__ import print_function
 import datetime
 import sys
 import os
@@ -17,11 +16,7 @@ def main(argv):
     miss = []
     for _ in range(12):
         fn = now.strftime(
-            (
-                "/mesonet/ARCHIVE/data/%Y/%m/%d/GIS/uscomp/"
-                + prod
-                + "_%Y%m%d%H%M.png"
-            )
+            f"/mesonet/ARCHIVE/data/%Y/%m/%d/GIS/uscomp/{prod}_%Y%m%d%H%M.png"
         )
         if not os.path.isfile(fn):
             miss.append(now.strftime("%Y%m%d_%H%M"))
@@ -31,8 +26,8 @@ def main(argv):
         print("OK")
         return 0
     print(
-        "CRITICAL - %s archive miss N0R %s"
-        % (base.strftime("%d_%H%M"), ", ".join(miss))
+        "CRITICAL - %s archive miss %s %s"
+        % (base.strftime("%d_%H%M"), prod, ", ".join(miss))
     )
     return 2
 
