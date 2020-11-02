@@ -1,7 +1,6 @@
 """
  Make sure we have current RIDGE imagery
 """
-from __future__ import print_function
 import os
 import sys
 import stat
@@ -15,7 +14,7 @@ def check():
     now = datetime.datetime.now()
     count = []
     for nexrad in SAMPLES:
-        fn = "/home/ldm/data/gis/images/4326/ridge/%s/N0Q_0.png" % (nexrad,)
+        fn = f"/home/meteor_ldm/data/gis/images/4326/ridge/{nexrad}/N0Q_0.png"
         mtime = os.stat(fn)[stat.ST_MTIME]
         ts = datetime.datetime.fromtimestamp(mtime)
         diff = (now - ts).days * 86400.0 + (now - ts).seconds
@@ -28,10 +27,10 @@ def main():
     """Go Main Go."""
     badcount = check()
     msg = "%s/%s outage %s" % (len(badcount), len(SAMPLES), ",".join(badcount))
-    if len(badcount) < 3:
+    if len(badcount) < 5:
         print("OK - %s" % (msg,))
         status = 0
-    elif len(badcount) < 4:
+    elif len(badcount) < 7:
         print("WARNING - %s" % (msg,))
         status = 1
     else:
