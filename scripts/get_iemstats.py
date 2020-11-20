@@ -9,13 +9,8 @@ import sys
 
 import rrdtool
 
-j = {
-    "stats": {},
-    "valid": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-}
 
-
-def get_reqs():
+def get_reqs(j):
     """Get requests"""
     count = 0
     for i in range(100, 110):
@@ -30,7 +25,7 @@ def get_reqs():
     j["stats"]["apache_req_per_sec"] = count
 
 
-def get_bandwidth():
+def get_bandwidth(j):
     """get bandwith"""
     fn = "/var/lib/pnp4nagios/iem-director0/eth0.rrd"
 
@@ -47,8 +42,12 @@ def get_bandwidth():
 
 def main():
     """Go Main Go"""
-    get_reqs()
-    get_bandwidth()
+    j = {
+        "stats": {},
+        "valid": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+    get_reqs(j)
+    get_bandwidth(j)
     sys.stdout.write("Content-type: text/plain\n\n")
     sys.stdout.write(json.dumps(j))
 

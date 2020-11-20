@@ -19,14 +19,14 @@ def read_stats(device):
     """read the stats"""
     fn = "/tmp/check_tcptraffic_py_%s_%s" % (device, getpass.getuser())
     if not os.path.isfile(fn):
-        return
+        return None
     fp = open(fn)
     try:
         payload = json.load(fp)
     except Exception:
         # remove the file
         os.unlink(fn)
-        return
+        return None
     fp.close()
     payload["valid"] = datetime.datetime.strptime(
         payload["valid"], "%Y-%m-%dT%H:%M:%SZ"
@@ -70,18 +70,18 @@ def main(argv):
     current = get_stats(device)
     if current is None:
         print("CRITICAL - nodata")
-        sys.exit(2)
+        return 2
     write_stats(device, current)
     if old is None:
         print("NOTICE - initializing counter")
-        sys.exit(0)
+        return 0
     # need to support rhel6 hosts, so no total_seconds()
     seconds = (datetime.datetime.utcnow() - old["valid"]).days * 86400 + (
         datetime.datetime.utcnow() - old["valid"]
     ).seconds
     if seconds < 1 or seconds > 700:
         print("NOTICE - seconds timer is too large %s" % (seconds,))
-        sys.exit(0)
+        return 0
     rxrate = compute_rate(old["rxbytes"], current["rxbytes"], seconds)
     txrate = compute_rate(old["txbytes"], current["txbytes"], seconds)
 
@@ -93,8 +93,8 @@ def main(argv):
         )
         % (device, rxrate + txrate, rxrate + txrate, rxrate, txrate, seconds)
     )
-    sys.exit(0)
+    return 0
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main(sys.argv))

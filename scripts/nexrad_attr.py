@@ -1,5 +1,4 @@
 """Nagios check to make sure we have NEXRAD attribute data"""
-from __future__ import print_function
 import sys
 
 from pyiem.util import get_dbconn
@@ -11,10 +10,8 @@ def main():
     pcursor = pgconn.cursor()
 
     pcursor.execute(
-        """
-        select count(*) from nexrad_attributes WHERE
-        valid > now() - '30 minutes'::interval
-    """
+        "select count(*) from nexrad_attributes WHERE "
+        "valid > now() - '30 minutes'::interval"
     )
     row = pcursor.fetchone()
     count = row[0]

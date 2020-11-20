@@ -83,10 +83,10 @@ def runner(hostname, feedtype):
         exitcode = 0
     elif min_latency < thresholds[1]:
         exitcode = 1
-    stats = "prods=%.0f;;;0; bytes=%.0fB;;;; latency=%.4fs;;;;" % (
+    stats = "prods=%.0f;;;0; bytes=%.0fB;;;; latency=%s;;;;" % (
         tot_prods,
         tot_bytes,
-        min_latency,
+        "%.4f" % (min_latency,) if min_latency < 1e6 else "U",
     )
     print("%s | %s" % (msg, stats))
     return exitcode
