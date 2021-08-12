@@ -5,8 +5,8 @@ from datetime import datetime
 import requests
 
 ENDPOINTS = {
-    "MOS": "/api/1/mos.txt?station=KDSM&model=GFS",
-    "DRYDOWN": "/api/1/drydown.json?lat=42.99&lon=-93.99",
+    "MOS": "/mos.txt?station=KDSM&model=GFS",
+    "DRYDOWN": "/drydown.json?lat=42.99&lon=-93.99",
 }
 
 
