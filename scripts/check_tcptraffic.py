@@ -87,11 +87,19 @@ def main(argv):
 
     print(
         (
-            "TCPTRAFFIC OK - %s %.0f bytes/s | "
+            "TCPTRAFFIC OK - %s RX: %.4f MB/s TX: %.4f MB/s | "
             "TOTAL=%.0fB;400000000;500000000 "
             "IN=%.0fB;; OUT=%.0fB;; TIME=%.0f;;"
         )
-        % (device, rxrate + txrate, rxrate + txrate, rxrate, txrate, seconds)
+        % (
+            device,
+            rxrate / 1e6,
+            txrate / 1e6,
+            rxrate + txrate,
+            rxrate,
+            txrate,
+            seconds,
+        )
     )
     return 0
 
