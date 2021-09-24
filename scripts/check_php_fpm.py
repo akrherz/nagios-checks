@@ -147,7 +147,7 @@ def main():
         f"queue={data['listen queue']};10;20"
     )
     print(msg)
-    return 0 if data["listen queue"] < 0 else 2
+    return 2 if data["listen queue"] > 0 else 0
 
 
 if __name__ == "__main__":
