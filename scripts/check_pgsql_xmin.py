@@ -4,20 +4,19 @@
   the default postgresql setting from 200 mil to 180 mil as the database does
   lots of writes and autovac sometimes can not keep up.
 """
-from __future__ import print_function
 import sys
-from pyiem.util import get_dbconn
+
+# Third party
+import psycopg2
 
 
 def check(dbname):
     """Do the database check."""
-    pgconn = get_dbconn(dbname, user="nobody")
+    pgconn = psycopg2.connect(f"dbname={dbname} user=nobody")
     icursor = pgconn.cursor()
     icursor.execute(
-        """
-        SELECT datname, age(datfrozenxid) FROM pg_database
-        ORDER by age DESC LIMIT 1
-    """
+        "SELECT datname, age(datfrozenxid) FROM pg_database "
+        "ORDER by age DESC LIMIT 1"
     )
     row = icursor.fetchone()
 
