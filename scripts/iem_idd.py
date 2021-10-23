@@ -9,7 +9,7 @@ import datetime
 
 def main():
     """Go Main Go."""
-    FN = "/home/meteor_ldm/data/gis/images/4326/USCOMP/n0q_0.png"
+    FN = "/mesonet/ldmdata/gis/images/4326/USCOMP/n0q_0.png"
     now = datetime.datetime.now()
     mtime = os.stat(FN)[stat.ST_MTIME]
     ts = datetime.datetime.fromtimestamp(mtime)
