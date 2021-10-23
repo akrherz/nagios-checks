@@ -28,7 +28,9 @@ def main(argv):
         radarson,
     )
 
-    if gentime < 300 and radarson > 50 and latency < 60 * 10:
+    if prod == "n0r" or (
+        gentime < 300 and radarson > 50 and latency < 60 * 10
+    ):
         print("OK |%s" % (stats))
         return 0
     if gentime > 300:
