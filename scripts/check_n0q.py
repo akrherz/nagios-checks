@@ -12,7 +12,7 @@ def main(argv):
     prod = argv[1]
 
     j = json.load(
-        open("/home/ldm/data/gis/images/4326/USCOMP/%s_0.json" % (prod,))
+        open("/mesonet/ldmdata/gis/images/4326/USCOMP/%s_0.json" % (prod,))
     )
     prodtime = datetime.datetime.strptime(
         j["meta"]["valid"], "%Y-%m-%dT%H:%M:%SZ"
