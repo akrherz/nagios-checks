@@ -24,10 +24,11 @@ def main():
     if lag is None:
         print("Unknown Sync Status")
         return 2
-    print(f"Not Synced |lag={lag};60;120;240")
-    if lag > 240:
+    print(f"Not Synced by {lag}s |lag={lag};60;120;240")
+    if lag > 600:
         return 2
-    if lag > 60:
+    # Prevent some noisiness due to slow disks involved
+    if lag > 400:
         return 1
     return 0
 
