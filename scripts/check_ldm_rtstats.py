@@ -48,7 +48,7 @@ def get_fileage(fn):
 
 
 def runner(hostname, feedtype):
-    """ Do something! """
+    """Do something!"""
     for username in ["ldm", "meteor_ldm"]:
         mydir = "/home/%s/rtstats/%s/%s" % (
             username,
