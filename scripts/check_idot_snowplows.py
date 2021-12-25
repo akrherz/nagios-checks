@@ -1,7 +1,6 @@
 """
  Nagios check to see how much snowplow data we are currently ingesting
 """
-from __future__ import print_function
 import sys
 import datetime
 
@@ -25,28 +24,22 @@ def main():
     count = row[0]
     daycount = row[1]
 
-    if datetime.date.today().month in (4, 5, 6, 7, 8, 9, 10):
-        print(
-            ("OK - snowplows %s/%s |count=%s;2;1;0 daycount=%s;2;1;0")
-            % (count, daycount, count, daycount)
-        )
+    msg = (
+        f"snowplows {count}/{daycount} |"
+        f"count={count};2;1;0 daycount={daycount};2;1;0"
+    )
+    today = datetime.date.today()
+    # Don't complain on offseason or weekend
+    if today.month in (4, 5, 6, 7, 8, 9, 10) or today.isoweekday() in (6, 7):
+        print(f"OK - {msg}")
         sys.exit(0)
     elif daycount > 2:
-        print(
-            ("OK - snowplows %s/%s |count=%s;2;1;0 daycount=%s;2;1;0")
-            % (count, daycount, count, daycount)
-        )
+        print(f"OK - {msg}")
         sys.exit(0)
     elif daycount > 1:
-        print(
-            ("OK - snowplows %s/%s |count=%s;2;1;0 daycount=%s;2;1;0")
-            % (count, daycount, count, daycount)
-        )
+        print(f"OK - {msg}")
         sys.exit(1)
-    print(
-        ("CRITICAL - snowplows %s/%s |count=%s;2;1;0 daycount=%s;2;1;0")
-        % (count, daycount, count, daycount)
-    )
+    print(f"CRITICAL - {msg}")
     sys.exit(2)
 
 
