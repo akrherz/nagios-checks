@@ -2,7 +2,6 @@
 
     python check_metar_station.py <network> <id> <minute_of_synop>
 """
-from __future__ import print_function
 import sys
 import datetime
 
@@ -18,11 +17,8 @@ def check(network, station, minute):
     pgconn = get_dbconn("iem", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
-        """
-    SELECT tmpf from current_log c JOIN stations s on
-    (s.iemid = c.iemid)
-    WHERE id = %s and network = %s and valid = %s
-    """,
+        "SELECT tmpf from current_log c JOIN stations s on "
+        "(s.iemid = c.iemid) WHERE id = %s and network = %s and valid = %s",
         (station, network, res["rt_valid"]),
     )
     if icursor.rowcount > 0:
@@ -34,9 +30,7 @@ def check(network, station, minute):
     pgconn = get_dbconn("asos", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
-        """
-    SELECT tmpf from alldata where station = %s and valid = %s
-    """,
+        "SELECT tmpf from alldata where station = %s and valid = %s",
         (station, res["arch_valid"]),
     )
     if icursor.rowcount > 0:
@@ -58,16 +52,9 @@ def main(argv):
         else "CRITICAL"
     )
     print(
-        ("%s - RT:%s(%s) ARCH:%s(%s) |rttemp=%s;;; archtemp=%s;;;")
-        % (
-            msg,
-            res["rt_valid"].strftime("%d%H%M"),
-            res["rt_temp"],
-            res["arch_valid"].strftime("%d%H%M"),
-            res["arch_temp"],
-            res["rt_temp"],
-            res["arch_temp"],
-        )
+        f"{msg} - RT:{res['rt_valid']:%d%H%M}({res['rt_temp']}) "
+        f"ARCH:{res['arch_valid']:%d%H%M}({res['arch_temp']}) "
+        f"|rttemp={res['rt_temp']};;; archtemp={res['arch_temp']};;;"
     )
     if msg == "OK":
         sys.exit(0)
