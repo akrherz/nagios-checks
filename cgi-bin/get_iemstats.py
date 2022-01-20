@@ -14,7 +14,7 @@ def get_reqs(j):
     """Get requests"""
     count = 0
     for i in range(100, 110):
-        fn = "/var/lib/pnp4nagios/iemvs%03i/Apache_Stats_II.rrd" % (i,)
+        fn = f"/var/lib/pnp4nagios/iemvs{i:03d}/Apache_Stats_II.rrd"
         ts = rrdtool.last(fn)
         data = rrdtool.fetch(fn, "AVERAGE", "-s", str(ts - 300), "-e", str(ts))
         samples = data[2]
