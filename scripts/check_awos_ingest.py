@@ -6,7 +6,7 @@ from pyiem.util import get_dbconn
 
 def check():
     """Do the check"""
-    pgconn = get_dbconn("iem")
+    pgconn = get_dbconn("iem", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
         "SELECT count(*) from current_log c JOIN stations s on "
