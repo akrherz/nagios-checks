@@ -1,42 +1,35 @@
 """Audit the NOAAPort data flow."""
-import os
+from datetime import timedelta
 import sys
 
-from pyiem.nws.product import TextProduct
-from pyiem.util import get_dbconn
+from pyiem.util import get_dbconn, utc
 
 
 def main():
     """Do some auditing."""
-    prod = None
-    for pil in ["TSTNCF", "WTSNCF"]:
-        fn = f"/home/meteor_ldm/{pil}.txt"
-        if os.path.isfile(fn):
-            with open(fn, encoding="utf-8") as fh:
-                _prod = TextProduct(fh.read().replace("\r", ""))
-            if prod is None or _prod.valid > prod.valid:
-                prod = _prod
-    if prod is None:
-        print("No /home/meteor_ldm/{TSTNCF,WTSNCF}.txt")
-        return 1
+    utcnow = utc().replace(second=0, microsecond=0)
     # Go find this product in the afos database
     cursor = get_dbconn("id3b", user="nobody").cursor()
     cursor.execute(
-        "SELECT entered_at, valid_at from ldm_product_log where "
-        "awips_id = %s and wmo_valid_at = %s",
-        (prod.afos, prod.valid),
+        "SELECT entered_at, valid_at, wmo_valid_at, awips_id from "
+        "ldm_product_log where awips_id in ('TSTNCF', 'WTSNCF') and "
+        "wmo_valid_at > %s ORDER by wmo_valid_at DESC LIMIT 1",
+        (utcnow - timedelta(minutes=30),),
     )
     if cursor.rowcount == 0:
-        print(f"{prod.get_product_id()} missing in ldm_product_log")
+        print("TSTNCF,WTSNCF missing in ldm_product_log")
         return 1
     row = cursor.fetchone()
+    if (utcnow - row[2]) > timedelta(minutes=10):
+        print(f"TSTNCF,WTSNCF wmo_valid_at is too old {row[2]}")
+        return 1
     # noaaport_latency is the valid_at minus product valid
-    noaaport_latency = (row[1] - prod.valid).total_seconds()
+    noaaport_latency = (row[1] - row[2]).total_seconds()
     # idd latency is the entered_at minues valid_at
     idd_latency = (row[0] - row[1]).total_seconds()
     # Create the nagios stats line
     print(
-        f"{prod.afos} {prod.valid} NP:{noaaport_latency:.2f}s "
+        f"{row[3]} {row[2]} NP:{noaaport_latency:.2f}s "
         f"IDD:{idd_latency:.2f}s "
         f"|NOAAPORT_LATENCY={noaaport_latency:.4f};180;300;600 "
         f"IDD_LATENCY={idd_latency:.4f};180;300;600"
