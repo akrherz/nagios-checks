@@ -31,7 +31,6 @@ chico.unidata.ucar.edu_v_metfs1.agron.iastate.edu
 2207@0001
 6.10.1
 """
-from __future__ import print_function
 import sys
 import os
 import glob
@@ -50,12 +49,8 @@ def get_fileage(fn):
 def runner(hostname, feedtype):
     """Do something!"""
     for username in ["ldm", "meteor_ldm"]:
-        mydir = "/home/%s/rtstats/%s/%s" % (
-            username,
-            hostname,
-            # workaround nagios/nrpe issues
-            feedtype if feedtype != "IDS" else "IDS|DDPLUS",
-        )
+        mm = feedtype if feedtype != "IDS" else "IDS|DDPLUS"
+        mydir = f"/home/{username}/rtstats/{hostname}/{mm}"
         if os.path.isdir(mydir):
             os.chdir(mydir)
             break
@@ -70,15 +65,18 @@ def runner(hostname, feedtype):
         age = get_fileage(fn)
         if age > (time_threshold * 60):
             continue
-        with open(fn) as fp:
+        with open(fn, encoding="utf-8") as fp:
             line = fp.read()
             tokens = line.split()
             tot_prods += float(tokens[5])
             tot_bytes += float(tokens[6])
-            min_latency = min([float(tokens[7]), min_latency])
+            latency = float(tokens[7])
+            # Don't trust values below zero, likely bad clocks
+            if latency > 0:
+                min_latency = min([float(tokens[7]), min_latency])
 
     exitcode = 2
-    msg = "LDM %s latency %.4fs" % (feedtype, min_latency)
+    msg = f"LDM {feedtype} latency {min_latency:.4f}s"
     thresholds = [300, 1200]
     if feedtype == "CONDUIT":
         thresholds = [600, 2400]
@@ -86,12 +84,12 @@ def runner(hostname, feedtype):
         exitcode = 0
     elif min_latency < thresholds[1]:
         exitcode = 1
-    stats = "prods=%.0f;;;0; bytes=%.0fB;;;; latency=%s;;;;" % (
-        tot_prods,
-        tot_bytes,
-        "%.4f" % (min_latency,) if min_latency < 1e6 else "U",
+    tt = f"{min_latency:.4f}" if min_latency < 1e6 else "U"
+    stats = (
+        f"prods={tot_prods:.0f};;;0; bytes={tot_bytes:.0f}B;;;; "
+        f"latency={tt};;;;"
     )
-    print("%s | %s" % (msg, stats))
+    print(f"{msg} | {stats}")
     return exitcode
 
 

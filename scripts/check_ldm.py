@@ -21,17 +21,15 @@ import os
 def main():
     """Go Main Go."""
     for username in ["ldm", "meteor_ldm"]:
-        fn = "/home/%s/bin/ldmadmin" % (username,)
+        fn = f"/home/{username}/bin/ldmadmin"
         if not os.path.isfile(fn):
             continue
-        proc = subprocess.Popen(
-            "%s printmetrics" % (fn,), shell=True, stdout=subprocess.PIPE
-        )
+        proc = subprocess.Popen([fn, "printmetrics"], stdout=subprocess.PIPE)
         break
     data = proc.stdout.read().decode("ascii")
     tokens = data.split()
     if len(tokens) != 18:
-        print("CRITICAL - can not parse output %s " % (data,))
+        print(f"CRITICAL - can not parse output {data} ")
         sys.exit(2)
 
     # We are downstream of how many hosts
@@ -49,21 +47,10 @@ def main():
         msg = "CRITICAL"
         estatus = 2
     print(
-        (
-            "%s - Down:%s Up:%s Raw:%s| downstream=%s;; upstream=%s;; "
-            "queue_age=%s;; product_count=%s;; byte_count=%s"
-        )
-        % (
-            msg,
-            downstream,
-            upstream,
-            data,
-            downstream,
-            upstream,
-            queue_age,
-            product_count,
-            byte_count,
-        )
+        f"{msg} - Down:{downstream} Up:{upstream} Raw:{data}| "
+        f"downstream={downstream};; upstream={upstream};; "
+        f"queue_age={queue_age};; product_count={product_count};; "
+        f"byte_count={byte_count};;"
     )
     return estatus
 

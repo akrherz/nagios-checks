@@ -14,7 +14,7 @@ def main():
         "SELECT entered_at, valid_at, wmo_valid_at, awips_id from "
         "ldm_product_log where awips_id in ('TSTNCF', 'WTSNCF') and "
         "wmo_valid_at > %s ORDER by wmo_valid_at DESC LIMIT 1",
-        (utcnow - timedelta(minutes=30),),
+        (utcnow - timedelta(minutes=15),),
     )
     if cursor.rowcount == 0:
         print("TSTNCF,WTSNCF missing in ldm_product_log")
