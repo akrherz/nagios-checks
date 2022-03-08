@@ -38,8 +38,8 @@ def main():
     print(
         f"{prod.afos} {prod.valid} NP:{noaaport_latency:.2f}s "
         f"IDD:{idd_latency:.2f}s "
-        f"|NOAAPORT_LATENCY={noaaport_latency:.1f}s;180s;300s;600s "
-        f"IDD_LATENCY={idd_latency:.1f}s;180s;300s;600s"
+        f"|NOAAPORT_LATENCY={noaaport_latency:.1f};180;300;600 "
+        f"IDD_LATENCY={idd_latency:.1f};180;300;600"
     )
     if max([idd_latency, noaaport_latency]) > 300:
         return 2
