@@ -20,7 +20,7 @@ def main():
         print("No /tmp/{TSTNCF,WTSNCF}.txt")
         return 1
     # Go find this product in the afos database
-    cursor = get_dbconn("id3b").cursor()
+    cursor = get_dbconn("id3b", user="nobody").cursor()
     cursor.execute(
         "SELECT entered_at, valid_at from ldm_product_log where "
         "awips_id = %s and wmo_valid_at = %s",
