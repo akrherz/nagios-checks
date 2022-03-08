@@ -10,14 +10,14 @@ def main():
     """Do some auditing."""
     prod = None
     for pil in ["TSTNCF", "WTSNCF"]:
-        fn = f"/tmp/{pil}.txt"
+        fn = f"/home/meteor_ldm/{pil}.txt"
         if os.path.isfile(fn):
             with open(fn, encoding="utf-8") as fh:
                 _prod = TextProduct(fh.read().replace("\r", ""))
             if prod is None or _prod.valid > prod.valid:
                 prod = _prod
     if prod is None:
-        print("No /tmp/{TSTNCF,WTSNCF}.txt")
+        print("No /home/meteor_ldm/{TSTNCF,WTSNCF}.txt")
         return 1
     # Go find this product in the afos database
     cursor = get_dbconn("id3b", user="nobody").cursor()
