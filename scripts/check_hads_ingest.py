@@ -1,7 +1,6 @@
 """
  Check how much HADS data we have
 """
-from __future__ import print_function
 import sys
 
 from pyiem.util import get_dbconn
@@ -11,11 +10,10 @@ icursor = IEM.cursor()
 
 
 def check():
+    """check!"""
     icursor.execute(
-        """
-        SELECT count(*) from current_shef
-        WHERE valid > now() - '1 hour'::interval
-    """
+        "SELECT count(*) from current_shef "
+        "WHERE valid > now() - '1 hour'::interval"
     )
     row = icursor.fetchone()
 
@@ -25,15 +23,15 @@ def check():
 def main():
     """Go Main."""
     count = check()
+    stats = f"{count} count |count={count};1000;5000;10000"
     if count > 10000:
-        print("OK - %s count |count=%s;1000;5000;10000" % (count, count))
+        print(f"OK - {stats}")
         return 0
-    elif count > 5000:
-        print("WARNING - %s count |count=%s;1000;5000;10000" % (count, count))
+    if count > 5000:
+        print(f"WARNING - {stats}")
         return 1
-    else:
-        print("CRITICAL - %s count |count=%s;1000;5000;10000" % (count, count))
-        return 2
+    print(f"CRITICAL  - {stats}")
+    return 2
 
 
 if __name__ == "__main__":

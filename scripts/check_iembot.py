@@ -6,11 +6,15 @@ import requests
 
 def main():
     """Go Main Go."""
-    req = requests.get("http://iembot:9004/room/kdmx.xml")
+    try:
+        req = requests.get("http://iembot:9004/room/kdmx.xml")
+    except Exception as exp:
+        print(f"CRITICAL - {exp}")
+        return 2
     if req.status_code == 200:
-        print("OK - len(kdmx.xml) is %s" % (len(req.content),))
+        print(f"OK - len(kdmx.xml) is {len(req.content)}")
         return 0
-    print("CRITICAL - /room/kdmx.xml returned code %s" % (req.status_code,))
+    print(f"CRITICAL - /room/kdmx.xml returned code {req.status_code}")
     return 2
 
 

@@ -1,5 +1,4 @@
 """Check to make sure we have HRRR model data flowing to the IEM archives"""
-from __future__ import print_function
 import os
 import sys
 import datetime
@@ -11,10 +10,8 @@ def check():
     diff = None
     for hr in range(8):
         fn = now.strftime(
-            (
-                "/mesonet/ARCHIVE/data/%Y/%m/%d/model/hrrr/%H/"
-                "hrrr.t%Hz.3kmf00.grib2"
-            )
+            "/mesonet/ARCHIVE/data/%Y/%m/%d/model/hrrr/%H/"
+            "hrrr.t%Hz.3kmf00.grib2"
         )
         now = now - datetime.timedelta(hours=1)
         if not os.path.isfile(fn):
@@ -28,15 +25,15 @@ def check():
 def main():
     """Go Main Go"""
     diff, now = check()
-    stats = "|age=%s;4;5;6" % (diff if diff is not None else -1,)
+    stats = f"|age={diff if diff is not None else -1};4;5;6"
     if diff is not None and diff < 6:
-        print("OK - %sz found %s" % (now.strftime("%H"), stats))
+        print(f"OK - {now:%H}z found {stats}")
         status = 0
     elif diff is not None:
-        print("WARNING - %sz found %s" % (now.strftime("%H"), stats))
+        print(f"WARNING - {now:%H}z found {stats}")
         status = 1
     else:
-        print("CRITICAL - no HRRR found %s" % (stats,))
+        print(f"CRITICAL - no HRRR found {stats}")
         status = 2
     return status
 

@@ -1,5 +1,4 @@
 """Make sure we are producing webcam lapses!"""
-from __future__ import print_function
 import os
 import sys
 import stat
@@ -13,7 +12,7 @@ def check():
     good = 0
     now = datetime.datetime.now()
     for filename in os.listdir(BASEDIR):
-        fn = "%s/%s" % (BASEDIR, filename)
+        fn = f"{BASEDIR}/{filename}"
         mtime = os.stat(fn)[stat.ST_MTIME]
         ts = datetime.datetime.fromtimestamp(mtime)
         diff = (now - ts).days * 86400.0 + (now - ts).seconds
@@ -25,11 +24,11 @@ def check():
 def main():
     """Go Main Go."""
     good = check()
-    msg = "%s good lapses" % (good,)
+    msg = f"{good} good lapses"
     if good > 30:
-        print("OK - %s" % (msg,))
+        print(f"OK - {msg}")
         return 0
-    print("CRITICAL - %s" % (msg,))
+    print(f"CRITICAL - {msg}")
     return 2
 
 
