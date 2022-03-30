@@ -10,7 +10,7 @@ def check():
     icursor = pgconn.cursor()
     icursor.execute(
         "SELECT count(*) from current_log c JOIN stations s on "
-        "(s.iemid = c.iemid) WHERE network = 'AWOS' and "
+        "(s.iemid = c.iemid) WHERE network = 'IA_ASOS' and "
         "valid > now() - '75 minutes'::interval and "
         "extract(minute from valid) not in (15, 35, 55)"
     )
