@@ -7,18 +7,18 @@ Array("In Air Handler", "Out Air Handler", "Out Rack", "In Rack")
 2 88.25
 3 62.04
 """
-from __future__ import print_function
 import sys
 import os
 
 
 def main():
     """Go Main Go."""
-    fn = "/tmp/onewire.txt"
+    fn = "/home/meteor_ldm/onewire/onewire.txt"
     if not os.path.isfile(fn):
-        print("ERROR: %s does not exist" % (fn,))
+        print(f"ERROR: {fn} does not exist")
         return 2
-    data = open(fn, "r").readlines()
+    with open(fn, "r", encoding="utf-8") as fh:
+        data = fh.readlines()
     if len(data) != 4:
         print("WARNING - Could not read file!")
         return 1
@@ -36,16 +36,16 @@ def main():
     maxes = [80, 70, 100, 75]
     msg = ""
     for k, d, m in zip(ks, v, maxes):
-        ds += "%s=%s;%s;%s;%s " % (k, d, m, m + 5, m + 10)
-        msg += "%s %s," % (k, d)
+        ds += f"{k}={d};{m};{m + 5};{m + 10} "
+        msg += f"{k} {d},"
     if v[3] < 75:
-        print("OK - %s |%s" % (msg, ds))
+        print(f"OK - {msg} |{ds}")
         status = 0
     elif v[3] < 80:
-        print("WARNING - %s |%s" % (msg, ds))
+        print(f"WARNING - {msg} |%{ds}")
         status = 1
     else:
-        print("CRITICAL - %s |%s" % (msg, ds))
+        print(f"CRITICAL - {msg} |{ds}")
         status = 2
     return status
 
