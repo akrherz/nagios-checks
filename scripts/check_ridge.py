@@ -26,15 +26,15 @@ def check():
 def main():
     """Go Main Go."""
     badcount = check()
-    msg = "%s/%s outage %s" % (len(badcount), len(SAMPLES), ",".join(badcount))
+    msg = f"{len(badcount)}/{len(SAMPLES)} outage {','.join(badcount)}"
     if len(badcount) < 5:
-        print("OK - %s" % (msg,))
+        print(f"OK - {msg}")
         status = 0
     elif len(badcount) < 7:
-        print("WARNING - %s" % (msg,))
+        print(f"WARNING - {msg}")
         status = 1
     else:
-        print("CRITICAL - %s" % (msg,))
+        print(f"CRITICAL - {msg}")
         status = 2
     return status
 

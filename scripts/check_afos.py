@@ -10,8 +10,8 @@ def check():
     pgconn = get_dbconn("afos", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
-        """SELECT count(*) from products
-    WHERE entered > now() - '1 hour'::interval"""
+        "SELECT count(*) from products WHERE "
+        "entered > now() - '1 hour'::interval"
     )
     row = icursor.fetchone()
 
@@ -21,15 +21,15 @@ def check():
 def main():
     """Go Main."""
     count = check()
+    msg = f"{count} count |count={count};100;500;1000"
     if count > 1000:
-        print("OK - %s count |count=%s;100;500;1000" % (count, count))
+        print(f"OK - {msg}")
         return 0
-    elif count > 500:
-        print("WARNING - %s count |count=%s;100;500;1000" % (count, count))
+    if count > 500:
+        print(f"WARNING - {msg}")
         return 1
-    else:
-        print("CRITICAL - %s count |count=%s;100;500;1000" % (count, count))
-        return 2
+    print(f"CRITICAL - {msg}")
+    return 2
 
 
 if __name__ == "__main__":

@@ -21,13 +21,9 @@ def main(argv):
         status_code = 999
     ets = datetime.utcnow()
 
-    msg = "%s: %s %s |timing=%.3fs;10;5;3" % (
-        "OK" if status_code == 200 else "CRITICAL",
-        status_code,
-        uri,
-        (ets - sts).total_seconds(),
-    )
-    print(msg)
+    tt = "OK" if status_code == 200 else "CRITICAL"
+    tm = (ets - sts).total_seconds()
+    print(f"{tt}: {status_code} {uri} |timing={tm:.3f}s;10;5;3")
     return 0 if status_code == 200 else 2
 
 

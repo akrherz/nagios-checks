@@ -26,25 +26,15 @@ def check(dbname):
 def main(argv):
     """Go Main Go."""
     dbname, count = check(argv[1])
+    msg = f"{count} {dbname} |count={count};201000000;205000000;220000000"
     if count < 201000000:
-        print(
-            "OK - %s %s |count=%s;201000000;205000000;220000000"
-            % (count, dbname, count)
-        )
-        retval = 0
+        print(f"OK - {msg}")
+        return 0
     elif count < 205000000:
-        print(
-            ("WARNING - %s %s |count=%s;201000000;205000000;220000000")
-            % (count, dbname, count)
-        )
-        retval = 1
-    else:
-        print(
-            ("CRITICAL - %s %s |count=%s;201000000;205000000;220000000")
-            % (count, dbname, count)
-        )
-        retval = 2
-    return retval
+        print(f"WARNING - {msg}")
+        return 1
+    print(f"CRITICAL - {msg}")
+    return 2
 
 
 if __name__ == "__main__":

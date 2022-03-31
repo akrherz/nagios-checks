@@ -25,10 +25,7 @@ def main(argv):
     if not miss:
         print("OK")
         return 0
-    print(
-        "CRITICAL - %s archive miss %s %s"
-        % (base.strftime("%d_%H%M"), prod, ", ".join(miss))
-    )
+    print(f"CRITICAL - {base:%d_%H%M} archive miss {prod} {', '.join(miss)}")
     return 2
 
 

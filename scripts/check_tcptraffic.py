@@ -17,17 +17,16 @@ def compute_rate(old, new, seconds):
 
 def read_stats(device):
     """read the stats"""
-    fn = "/tmp/check_tcptraffic_py_%s_%s" % (device, getpass.getuser())
+    fn = f"/tmp/check_tcptraffic_py_{device}_{getpass.getuser()}"
     if not os.path.isfile(fn):
         return None
-    fp = open(fn)
     try:
-        payload = json.load(fp)
+        with open(fn, encoding="utf-8") as fp:
+            payload = json.load(fp)
     except Exception:
         # remove the file
         os.unlink(fn)
         return None
-    fp.close()
     payload["valid"] = datetime.datetime.strptime(
         payload["valid"], "%Y-%m-%dT%H:%M:%SZ"
     )
@@ -36,16 +35,16 @@ def read_stats(device):
 
 def write_stats(device, payload):
     """write to tmp file"""
-    fp = open(
-        "/tmp/check_tcptraffic_py_%s_%s" % (device, getpass.getuser()), "w"
-    )
-    json.dump(payload, fp)
-    fp.close()
+    fn = f"/tmp/check_tcptraffic_py_{device}_{getpass.getuser()}"
+    with open(fn, "w", encoding="utf-8") as fp:
+        json.dump(payload, fp)
 
 
 def get_stats(device):
     """Get the stats"""
-    for line in open("/proc/net/dev", "r").readlines():
+    with open("/proc/net/dev", encoding="utf-8") as fp:
+        lines = fp.readlines()
+    for line in lines:
         if not line.strip().startswith(device + ":"):
             continue
         tokens = line.strip().split()
@@ -80,26 +79,16 @@ def main(argv):
         datetime.datetime.utcnow() - old["valid"]
     ).seconds
     if seconds < 1 or seconds > 700:
-        print("NOTICE - seconds timer is too large %s" % (seconds,))
+        print(f"NOTICE - seconds timer is too large {seconds}")
         return 0
     rxrate = compute_rate(old["rxbytes"], current["rxbytes"], seconds)
     txrate = compute_rate(old["txbytes"], current["txbytes"], seconds)
 
     print(
-        (
-            "TCPTRAFFIC OK - %s RX: %.4f MB/s TX: %.4f MB/s | "
-            "TOTAL=%.0fB;400000000;500000000 "
-            "IN=%.0fB;; OUT=%.0fB;; TIME=%.0f;;"
-        )
-        % (
-            device,
-            rxrate / 1e6,
-            txrate / 1e6,
-            rxrate + txrate,
-            rxrate,
-            txrate,
-            seconds,
-        )
+        f"TCPTRAFFIC OK - {device} RX: {(rxrate / 1e6):.4f} MB/s "
+        f"TX: {(txrate / 1e6):.4f} MB/s | "
+        f"TOTAL={(txrate + rxrate):.0f}B;400000000;500000000 "
+        f"IN={rxrate:.0f}B;; OUT={txrate:.0f}B;; TIME={seconds:.1f};;"
     )
     return 0
 

@@ -16,17 +16,15 @@ def main():
     row = pcursor.fetchone()
     count = row[0]
 
-    msg = "L3 NEXRAD attr count %s" % (count,)
+    msg = f"L3 NEXRAD attr count {count} |count={count};2;1;0"
     if count > 2:
-        print("OK - %s |count=%s;2;1;0" % (msg, count))
-        retval = 0
-    elif count > 1:
-        print("OK - %s |count=%s;2;1;0" % (msg, count))
-        retval = 1
-    else:
-        print("CRITICAL - %s |count=%s;2;1;0" % (msg, count))
-        retval = 2
-    return retval
+        print(f"OK - {msg}")
+        return 0
+    if count > 1:
+        print(f"OK - {msg}")
+        return 1
+    print(f"CRITICAL - {msg}")
+    return 2
 
 
 if __name__ == "__main__":

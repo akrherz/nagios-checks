@@ -1,5 +1,4 @@
 """Check a raster file and count the number of non-zero values."""
-from __future__ import print_function
 import sys
 
 from osgeo import gdal
@@ -11,18 +10,17 @@ def main():
     ntp = gdal.Open("/mesonet/ldmdata/gis/images/4326/USCOMP/ntp_0.png")
     data = ntp.ReadAsArray()
     count = numpy.sum(numpy.where(data > 0, 1, 0))
-    sz = data.shape[0] * data.shape[1]
+    sz = data.shape[1] * data.shape[2]
 
+    msg = f"{count}/{sz}|count={count};100;500;1000"
     if count > 1000:
-        print("OK - %s/%s|count=%s;100;500;1000" % (count, sz, count))
-        status = 0
+        print(f"OK - {msg}")
+        return 0
     elif count > 500:
-        print("WARNING - %s/%s|count=%s;100;500;1000" % (count, sz, count))
-        status = 1
-    else:
-        print("CRITICAL - %s/%s|count=%s;100;500;1000" % (count, sz, count))
-        status = 2
-    return status
+        print(f"WARNING - {msg}")
+        return 1
+    print(f"CRITICAL - {msg}")
+    return 2
 
 
 if __name__ == "__main__":

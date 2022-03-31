@@ -1,7 +1,6 @@
 """
  Measure how fast the ASOS database is responding to queries for data!
 """
-from __future__ import print_function
 import sys
 import datetime
 from pyiem.util import get_dbconn
@@ -11,13 +10,10 @@ def check():
     """Do the check"""
     pgconn = get_dbconn("asos", user="nobody")
     icursor = pgconn.cursor()
-    year = str(datetime.datetime.now().year)
     icursor.execute(
-        """
+        f"""
     SELECT station, count(*), min(tmpf), max(tmpf)
-    from t"""
-        + year
-        + """ WHERE station =
+    from t{datetime.datetime.now().year} WHERE station =
     (select id from stations where network ~* 'ASOS' and online and
     archive_begin < '1980-01-01'
     ORDER by random() ASC LIMIT 1) GROUP by station
@@ -35,22 +31,14 @@ def main():
     station, count = check()
     t1 = datetime.datetime.now()
     delta = (t1 - t0).seconds + float((t1 - t0).microseconds) / 1000000.0
+    msg = f"{station} {count} |qtime={delta:.3f};5;10;15"
     if delta < 5:
-        print(
-            ("OK - %.3f %s %s |qtime=%.3f;5;10;15")
-            % (delta, station, count, delta)
-        )
+        print(f"OK - {msg}")
         return 0
-    elif delta < 10:
-        print(
-            ("WARNING - %.3f %s %s |qtime=%.3f;5;10;15")
-            % (delta, station, count, delta)
-        )
+    if delta < 10:
+        print(f"WARNING - {msg}")
         return 1
-    print(
-        ("CRITICAL - %.3f %s %s |qtime=%.3f;5;10;15")
-        % (delta, station, count, delta)
-    )
+    print(f"CRITICAL - {msg}")
     return 2
 
 
