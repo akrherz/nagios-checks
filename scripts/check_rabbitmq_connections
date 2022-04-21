@@ -166,7 +166,7 @@ for my $metric (@metrics) {
     my $value = 0;
     $value = $values->{$metric} if defined $values->{$metric};
     # want at least warning
-    my $code = $p->check_threshold(check => 110 - $value, warning => $warning, critical=> $critical);
+    my $code = $p->check_threshold(check => abs(120 - $value), warning => $warning, critical=> $critical);
     $p->add_message($code, sprintf("$metric ".$STATUS_TEXT{$code}." (%d)", $value)) ;
     $p->add_perfdata(label=>$metric, value => $value, warning=>$warning, critical=> $critical);
 }
