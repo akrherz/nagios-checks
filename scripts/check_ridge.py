@@ -14,7 +14,7 @@ def check():
     now = datetime.datetime.now()
     count = []
     for nexrad in SAMPLES:
-        fn = f"/mesonet/ldmdata/gis/images/4326/ridge/{nexrad}/N0Q_0.png"
+        fn = f"/mesonet/ldmdata/gis/images/4326/ridge/{nexrad}/N0B_0.png"
         mtime = os.stat(fn)[stat.ST_MTIME]
         ts = datetime.datetime.fromtimestamp(mtime)
         diff = (now - ts).days * 86400.0 + (now - ts).seconds
