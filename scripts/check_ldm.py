@@ -51,10 +51,10 @@ def main():
         sys.exit(2)
 
     queue_size_total = int(pqmon_tokens[1])
-    queue_size_used = int(pqmon_tokens[2])
+    queue_size_used = int(pqmon_tokens[3])
     queue_size_util = queue_size_used / queue_size_total * 100.0
     queue_slots_total = int(pqmon_tokens[4])
-    queue_slots_used = int(pqmon_tokens[5])
+    queue_slots_used = int(pqmon_tokens[6])
     queue_slots_util = queue_slots_used / queue_slots_total * 100.0
 
     # We are downstream of how many hosts
