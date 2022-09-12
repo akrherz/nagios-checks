@@ -73,7 +73,7 @@ def runner(hostname, feedtype):
             latency = float(tokens[7])
             # Don't trust values below zero, likely bad clocks
             if latency > 0:
-                min_latency = min([float(tokens[7]), min_latency])
+                min_latency = min([latency, min_latency])
 
     exitcode = 2
     msg = f"LDM {feedtype} latency {min_latency:.4f}s"

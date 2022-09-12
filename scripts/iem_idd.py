@@ -15,13 +15,13 @@ def main():
     ts = datetime.datetime.fromtimestamp(mtime)
     diff = (now - ts).days * 86400.0 + (now - ts).seconds
     if diff < 600:
-        print("OK - n0q_0.png %s" % (ts,))
+        print(f"OK - n0q_0.png {ts}")
         status = 0
     elif diff < 700:
-        print("WARNING - n0q_0.png %s" % (ts,))
+        print(f"WARNING - n0q_0.png {ts}")
         status = 1
     else:
-        print("CRITICAL - n0q_0.png %s" % (ts,))
+        print(f"CRITICAL - n0q_0.png {ts}")
         status = 2
     return status
 
