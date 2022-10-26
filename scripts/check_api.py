@@ -13,7 +13,7 @@ ENDPOINTS = {
 
 def main(argv):
     """Go Main Go."""
-    uri = f"http://iem-web-services.local:8000{ENDPOINTS[argv[1]]}"
+    uri = f"https://iem-web-services{ENDPOINTS[argv[1]]}"
     sts = datetime.utcnow()
     try:
         req = requests.get(uri, timeout=20)
