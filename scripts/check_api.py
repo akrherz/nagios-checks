@@ -7,6 +7,7 @@ import requests
 ENDPOINTS = {
     "MOS": "/mos.txt?station=KDSM&model=GFS",
     "DRYDOWN": "/drydown.json?lat=42.99&lon=-93.99",
+    "BUFKIT": "/bufkit.json?lat=42.5&lon=-92.5",
 }
 
 
