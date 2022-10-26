@@ -7,13 +7,13 @@ import requests
 ENDPOINTS = {
     "MOS": "/mos.txt?station=KDSM&model=GFS",
     "DRYDOWN": "/drydown.json?lat=42.99&lon=-93.99",
-    "BUFKIT": "/bufkit.json?lat=42.5&lon=-92.5",
+    "BUFKIT": "/nws/bufkit.json?lat=42.5&lon=-92.5",
 }
 
 
 def main(argv):
     """Go Main Go."""
-    uri = f"https://iem-web-services/api/1{ENDPOINTS[argv[1]]}"
+    uri = f"https://iem-web-services.agron.iastate.edu{ENDPOINTS[argv[1]]}"
     sts = datetime.utcnow()
     try:
         req = requests.get(uri, timeout=20)
