@@ -4,18 +4,26 @@ import sys
 from pyiem.util import get_dbconn
 
 
-def main():
+def main(argv):
     """Go Main Go."""
+
+    networks = ["KCRG", "KCCI", "MCFC"]
+    duration = 30
+    if len(argv) > 1 and argv[1] == "RWIS":
+        networks = ["IDOT"]
+        duration = 120
+
     with get_dbconn("mesosite", user="nobody") as pgconn:
         cursor = pgconn.cursor()
         cursor.execute(
             "select count(*) from camera_current where "
-            "valid > now() - '30 minutes'::interval and "
-            "substr(cam, 1, 4) in ('KCRG', 'KCCI', 'MCFC')"
+            "valid > now() - '%s minutes'::interval and "
+            "substr(cam, 1, 4) in %s",
+            (duration, tuple(networks)),
         )
         count = cursor.fetchone()[0]
 
-    msg = f"{count} images|count={count}"
+    msg = f"{count} images within {duration} minutes|count={count}"
     if count > 20:
         print(f"OK - {msg}")
         return 0
@@ -24,4 +32,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv))
