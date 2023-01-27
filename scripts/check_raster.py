@@ -10,7 +10,7 @@ def main():
     ntp = gdal.Open("/mesonet/ldmdata/gis/images/4326/USCOMP/ntp_0.png")
     data = ntp.ReadAsArray()
     count = numpy.sum(numpy.where(data > 0, 1, 0))
-    sz = data.shape[1] * data.shape[2]
+    sz = data.shape[0] * data.shape[1]
 
     msg = f"{count}/{sz}|count={count};100;500;1000"
     if count > 1000:
