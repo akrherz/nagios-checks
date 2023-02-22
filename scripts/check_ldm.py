@@ -57,17 +57,17 @@ def main():
     queue_slots_used = int(pqmon_tokens[6])
     queue_slots_util = queue_slots_used / queue_slots_total * 100.0
 
-    # We are downstream of how many hosts
-    downstream = int(tokens[4])
-    # We are the upstream of how many hosts
-    upstream = int(tokens[5])
+    # LDM 6.14.5 corrected this to be right.
+    # https://github.com/Unidata/LDM/issues/120
+    server_count = int(tokens[4])
+    client_count = int(tokens[5])
     queue_age = tokens[6]
     product_count = tokens[7]
     byte_count = tokens[8]
 
     msg = "OK"
     estatus = 0
-    if downstream < 1:
+    if client_count < 1:
         msg = "CRITICAL"
         estatus = 2
     # Ideally, the LDM queue is close to full on size, but still has some
@@ -77,8 +77,8 @@ def main():
         estatus = 2
 
     print(
-        f"{msg} - Down:{downstream} Up:{upstream} Raw:{data}| "
-        f"downstream={downstream};; upstream={upstream};; "
+        f"{msg} - Down:{client_count} Up:{server_count} Raw:{data}| "
+        f"downstream={client_count};; upstream={server_count};; "
         f"queue_age={queue_age};; product_count={product_count};; "
         f"byte_count={byte_count};; queue_slot_util={queue_slots_util:.3f};; "
         f"queue_size_util={queue_size_util:.3f};;"
