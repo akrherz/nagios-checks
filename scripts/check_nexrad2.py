@@ -1,10 +1,10 @@
 """
  Make sure our nexrad files are current!
 """
-import os
-import sys
-import stat
 import datetime
+import os
+import stat
+import sys
 
 SAMPLES = ["KDMX", "KAMA", "KLWX", "KFFC", "KBMX", "KBGM", "KCLE"]
 

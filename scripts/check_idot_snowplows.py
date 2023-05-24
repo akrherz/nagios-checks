@@ -1,8 +1,8 @@
 """
  Nagios check to see how much snowplow data we are currently ingesting
 """
-import sys
 import datetime
+import sys
 
 from pyiem.util import get_dbconn
 

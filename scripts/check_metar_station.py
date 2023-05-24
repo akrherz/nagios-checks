@@ -2,8 +2,8 @@
 
     python check_metar_station.py <network> <id> <minute_of_synop>
 """
-import sys
 import datetime
+import sys
 
 from pyiem.util import get_dbconn
 

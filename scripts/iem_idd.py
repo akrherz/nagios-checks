@@ -1,10 +1,10 @@
 """
  Nagios check to make sure we have data flowing through LDM
 """
-import sys
+import datetime
 import os
 import stat
-import datetime
+import sys
 
 
 def main():

@@ -1,6 +1,6 @@
 """Audit the NOAAPort data flow."""
-from datetime import timedelta
 import sys
+from datetime import timedelta
 
 from pyiem.util import get_dbconn, utc
 

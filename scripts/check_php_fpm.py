@@ -3,9 +3,9 @@ https://sleeplessbeastie.eu/2019/04/01/how-to-display-php-fpm-pool-information-u
 """
 
 import json
-import sys
 import socket
 import struct
+import sys
 
 
 class FCGIStatusClient:

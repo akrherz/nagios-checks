@@ -3,8 +3,8 @@
 
 NOTE: This needs to be exec for apache to use for CGI
 """
-import json
 import datetime
+import json
 import sys
 
 import rrdtool

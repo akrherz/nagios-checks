@@ -12,9 +12,9 @@ getTime(), getLoad(), getPortCount(), getPq(), getCpu()
 24137944e3 21514 $swapFree, $contextSwitches
 
 """
+import os
 import subprocess
 import sys
-import os
 
 
 def find_ldmpath():

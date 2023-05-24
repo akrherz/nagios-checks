@@ -1,10 +1,10 @@
 """
  Make sure we have current RIDGE imagery
 """
-import os
-import sys
-import stat
 import datetime
+import os
+import stat
+import sys
 
 SAMPLES = ["DVN", "GRK", "ABC", "DTX", "HTX", "LOT", "TLX"]
 

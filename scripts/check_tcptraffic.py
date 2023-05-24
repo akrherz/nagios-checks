@@ -1,10 +1,11 @@
 """Wrote my own tcptraffic nagios script, sigh"""
 from __future__ import print_function
-import sys
+
 import datetime
+import getpass
 import json
 import os
-import getpass
+import sys
 
 
 def compute_rate(old, new, seconds):

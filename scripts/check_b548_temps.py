@@ -7,8 +7,8 @@ Array("In Air Handler", "Out Air Handler", "Out Rack", "In Rack")
 2 88.25
 3 62.04
 """
-import sys
 import os
+import sys
 
 
 def main():

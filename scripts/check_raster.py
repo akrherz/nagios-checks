@@ -1,8 +1,8 @@
 """Check a raster file and count the number of non-zero values."""
 import sys
 
-from osgeo import gdal
 import numpy
+from osgeo import gdal
 
 
 def main():

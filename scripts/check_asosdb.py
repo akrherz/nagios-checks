@@ -1,8 +1,9 @@
 """
  Measure how fast the ASOS database is responding to queries for data!
 """
-import sys
 import datetime
+import sys
+
 from pyiem.util import get_dbconn
 
 

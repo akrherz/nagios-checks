@@ -1,8 +1,8 @@
 """
 Check the production of N0Q data!
 """
-import json
 import datetime
+import json
 import sys
 
 

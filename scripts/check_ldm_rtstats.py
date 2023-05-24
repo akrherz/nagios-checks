@@ -31,11 +31,11 @@ chico.unidata.ucar.edu_v_metfs1.agron.iastate.edu
 2207@0001
 6.10.1
 """
-import sys
-import os
-import glob
-import stat
 import datetime
+import glob
+import os
+import stat
+import sys
 
 
 def get_fileage(fn):

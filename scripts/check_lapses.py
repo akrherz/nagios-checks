@@ -1,8 +1,8 @@
 """Make sure we are producing webcam lapses!"""
-import os
-import sys
-import stat
 import datetime
+import os
+import stat
+import sys
 
 BASEDIR = "/mesonet/share/lapses/auto"
 
