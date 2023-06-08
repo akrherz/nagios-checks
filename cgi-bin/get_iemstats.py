@@ -10,17 +10,25 @@ import sys
 import rrdtool
 
 
+def process_fn(fn):
+    """Get what we want."""
+    ts = rrdtool.last(fn)
+    data = rrdtool.fetch(fn, "AVERAGE", "-s", str(ts - 300), "-e", str(ts))
+    samples = data[2]
+    if len(samples) < 2:
+        return 0
+    return samples[-2][13]
+
+
 def get_reqs(j):
     """Get requests"""
     count = 0
     for i in range(100, 110):
         fn = f"/var/lib/pnp4nagios/iemvs{i:03d}/Apache_Stats_II.rrd"
-        ts = rrdtool.last(fn)
-        data = rrdtool.fetch(fn, "AVERAGE", "-s", str(ts - 300), "-e", str(ts))
-        samples = data[2]
-        if len(samples) < 2:
-            continue
-        count += samples[-2][13]
+        count += process_fn(fn)
+    for i in range(35, 45):
+        fn = f"/var/lib/pnp4nagios/iemvs{i}-dc/Apache_Stats_II.rrd"
+        count += process_fn(fn)
 
     j["stats"]["apache_req_per_sec"] = count
 
