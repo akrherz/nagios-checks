@@ -25,11 +25,6 @@ def get_reqs(j):
     """Get requests"""
     count = 0
     bytes = 0
-    for i in range(100, 110):
-        fn = f"/var/lib/pnp4nagios/iemvs{i:03d}/Apache_Stats_II.rrd"
-        vals = process_fn(fn)
-        count += vals[0]
-        bytes += vals[1]
     for i in range(35, 45):
         fn = f"/var/lib/pnp4nagios/iemvs{i}-dc/Apache_Stats_II.rrd"
         vals = process_fn(fn)
