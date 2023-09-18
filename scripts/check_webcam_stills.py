@@ -18,8 +18,8 @@ def main(argv):
         cursor.execute(
             "select count(*) from camera_current where "
             "valid > now() - '%s minutes'::interval and "
-            "substr(cam, 1, 4) in %s",
-            (duration, tuple(networks)),
+            "substr(cam, 1, 4) = ANY(%s)",
+            (duration, networks),
         )
         count = cursor.fetchone()[0]
 
