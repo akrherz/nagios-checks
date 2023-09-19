@@ -1,5 +1,6 @@
 """Check the acquistion of stills from the webcams."""
 import sys
+from datetime import timedelta
 
 from pyiem.util import get_dbconn
 
@@ -17,9 +18,9 @@ def main(argv):
         cursor = pgconn.cursor()
         cursor.execute(
             "select count(*) from camera_current where "
-            "valid > now() - '%s minutes'::interval and "
+            "valid > now() - %s and "
             "substr(cam, 1, 4) = ANY(%s)",
-            (duration, networks),
+            (timedelta(minutes=duration), networks),
         )
         count = cursor.fetchone()[0]
 
