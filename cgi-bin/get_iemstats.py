@@ -35,6 +35,17 @@ def get_reqs(j):
     j["stats"]["bandwidth"] = bytes
 
 
+def get_telemetry(j):
+    """Add telemetry stats."""
+    fn = "/var/lib/pnp4nagios/mesonet/telemetry.rrd"
+    ts = rrdtool.last(fn)
+    data = rrdtool.fetch(fn, "AVERAGE", "-s", str(ts - 300), "-e", str(ts))[2][
+        0
+    ]
+    j["stats"]["telemetry_rate"] = data[0]
+    j["stats"]["telemetry_ok"] = data[4]
+
+
 def main():
     """Go Main Go"""
     j = {
@@ -42,6 +53,7 @@ def main():
         "valid": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
     get_reqs(j)
+    get_telemetry(j)
     sys.stdout.write("Content-type: text/plain\n\n")
     sys.stdout.write(json.dumps(j))
 
