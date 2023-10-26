@@ -13,7 +13,9 @@ def main():
             "where valid > now() - '5 minutes'::interval",
             conn,
         )
-    ok = len(df[df["status_code"] == 200].index) / len(df.index) * 100.0
+    size = len(df.index)
+    # HTTP 500 is deliniated as uncaught exception
+    ok = 100.0 - len(df[df["status_code"] == 500].index) / size * 100.0
     levels = df["timing"].quantile([0.5, 0.95, 0.99])
 
     print(
