@@ -1,6 +1,7 @@
 """
 Get some stats from the pg_stat_database view
 """
+
 import datetime
 import getpass
 import json

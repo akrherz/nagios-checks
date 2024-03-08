@@ -1,4 +1,5 @@
 """Make sure we are producing webcam lapses!"""
+
 import datetime
 import os
 import stat

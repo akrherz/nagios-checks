@@ -1,6 +1,7 @@
 """
- Make sure our nexrad files are current!
+Make sure our nexrad files are current!
 """
+
 import datetime
 import os
 import stat

@@ -1,4 +1,5 @@
 """Capture some stats from sar memory"""
+
 import subprocess
 import sys
 

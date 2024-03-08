@@ -1,4 +1,5 @@
 """Ensure that /api/ is returning results."""
+
 import sys
 from datetime import datetime
 

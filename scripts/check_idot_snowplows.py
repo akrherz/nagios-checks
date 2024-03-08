@@ -1,6 +1,7 @@
 """
- Nagios check to see how much snowplow data we are currently ingesting
+Nagios check to see how much snowplow data we are currently ingesting
 """
+
 import datetime
 import sys
 

@@ -1,4 +1,5 @@
 """Check a raster file and count the number of non-zero values."""
+
 import sys
 
 import numpy

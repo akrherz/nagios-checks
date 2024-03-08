@@ -1,6 +1,7 @@
 """
- Nagios check to make sure we have data flowing through LDM
+Nagios check to make sure we have data flowing through LDM
 """
+
 import datetime
 import json
 import os

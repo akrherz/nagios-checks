@@ -1,9 +1,10 @@
 """
-  Return the maximum xmin in the database, having too large of a value leads to
-  bad things and eventual database not accepting new writes.  I had to lower
-  the default postgresql setting from 200 mil to 180 mil as the database does
-  lots of writes and autovac sometimes can not keep up.
+Return the maximum xmin in the database, having too large of a value leads to
+bad things and eventual database not accepting new writes.  I had to lower
+the default postgresql setting from 200 mil to 180 mil as the database does
+lots of writes and autovac sometimes can not keep up.
 """
+
 import sys
 
 # Third party
