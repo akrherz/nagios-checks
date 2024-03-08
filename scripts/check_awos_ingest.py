@@ -1,4 +1,5 @@
 """Check how much local AWOS data ingest we have."""
+
 import sys
 
 from pyiem.util import get_dbconn

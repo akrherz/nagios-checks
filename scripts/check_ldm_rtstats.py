@@ -1,4 +1,4 @@
-""" Parse the files generated from LDM rtstats
+"""Parse the files generated from LDM rtstats
 
 
 snprintf(stats_data, sizeof(stats_data),
@@ -31,6 +31,7 @@ chico.unidata.ucar.edu_v_metfs1.agron.iastate.edu
 2207@0001
 6.10.1
 """
+
 import datetime
 import glob
 import os

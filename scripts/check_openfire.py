@@ -1,4 +1,5 @@
 """Ensure that Openfire is somewhat running"""
+
 import sys
 
 import requests

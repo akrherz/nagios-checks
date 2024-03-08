@@ -1,6 +1,7 @@
 """
- Measure how fast the ASOS database is responding to queries for data!
+Measure how fast the ASOS database is responding to queries for data!
 """
+
 import datetime
 import sys
 

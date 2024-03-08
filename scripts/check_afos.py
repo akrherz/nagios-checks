@@ -1,6 +1,7 @@
 """
- Check how much AFOS data we are ingesting
+Check how much AFOS data we are ingesting
 """
+
 import sys
 
 from pyiem.util import get_dbconn

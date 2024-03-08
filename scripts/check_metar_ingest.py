@@ -1,6 +1,7 @@
 """
- Check how much METAR data we have
+Check how much METAR data we have
 """
+
 import sys
 
 from pyiem.util import get_dbconn

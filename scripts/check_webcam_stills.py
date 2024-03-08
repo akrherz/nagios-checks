@@ -1,4 +1,5 @@
 """Check the acquistion of stills from the webcams."""
+
 import sys
 from datetime import timedelta
 

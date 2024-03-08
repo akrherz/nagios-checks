@@ -1,4 +1,5 @@
 """Check to make sure we have HRRR model data flowing to the IEM archives"""
+
 import datetime
 import os
 import sys

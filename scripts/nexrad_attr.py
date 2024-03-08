@@ -1,4 +1,5 @@
 """Nagios check to make sure we have NEXRAD attribute data"""
+
 import sys
 
 from pyiem.util import get_dbconn

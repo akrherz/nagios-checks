@@ -1,6 +1,7 @@
 """
- Make sure we have current RIDGE imagery
+Make sure we have current RIDGE imagery
 """
+
 import datetime
 import os
 import stat

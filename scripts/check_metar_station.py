@@ -1,7 +1,8 @@
 """Ensure that a station is getting ingested properly
 
-    python check_metar_station.py <network> <id> <minute_of_synop>
+python check_metar_station.py <network> <id> <minute_of_synop>
 """
+
 import datetime
 import sys
 

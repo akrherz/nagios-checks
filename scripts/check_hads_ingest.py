@@ -1,6 +1,7 @@
 """
- Check how much HADS data we have
+Check how much HADS data we have
 """
+
 import sys
 
 from pyiem.util import get_dbconn

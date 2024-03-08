@@ -1,4 +1,5 @@
 """Check website_telemetry"""
+
 import sys
 
 import pandas as pd
