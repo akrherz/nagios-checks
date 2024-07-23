@@ -3,20 +3,23 @@
 import sys
 
 import pandas as pd
-from pyiem.util import get_sqlalchemy_conn
+from pyiem.database import get_sqlalchemy_conn
+from sqlalchemy import text
 
 
 def main():
     """Go Main Go"""
     with get_sqlalchemy_conn("mesosite", user="nobody") as conn:
         df = pd.read_sql(
-            "select timing, status_code from website_telemetry "
-            "where valid > now() - '5 minutes'::interval",
+            text(
+                "select timing, status_code from website_telemetry "
+                "where valid > now() - '5 minutes'::interval"
+            ),
             conn,
         )
     size = len(df.index)
-    # HTTP 500 is deliniated as uncaught exception
-    ok = 100.0 - len(df[df["status_code"] == 500].index) / size * 100.0
+    # Anything higher than 500 is bad
+    ok = 100.0 - len(df[df["status_code"] >= 500].index) / size * 100.0
     levels = df["timing"].quantile([0.5, 0.95, 0.99])
 
     print(
