@@ -1,20 +1,20 @@
 """Check to make sure we have HRRR model data flowing to the IEM archives"""
 
-import datetime
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 
 
 def check():
     """Do the chec please"""
-    now = datetime.datetime.utcnow()
+    now = datetime.now(timezone.utc)
     diff = None
     for hr in range(8):
         fn = now.strftime(
             "/mesonet/ARCHIVE/data/%Y/%m/%d/model/hrrr/%H/"
             "hrrr.t%Hz.3kmf00.grib2"
         )
-        now = now - datetime.timedelta(hours=1)
+        now = now - timedelta(hours=1)
         if not os.path.isfile(fn):
             continue
         diff = hr

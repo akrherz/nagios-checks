@@ -2,10 +2,10 @@
 Nagios check to see how much snowplow data we are currently ingesting
 """
 
-import datetime
 import sys
+from datetime import date
 
-from pyiem.util import get_dbconn
+from pyiem.database import get_dbconn
 
 
 def main():
@@ -29,7 +29,7 @@ def main():
         f"snowplows {count}/{daycount} |"
         f"count={count};2;1;0 daycount={daycount};2;1;0"
     )
-    today = datetime.date.today()
+    today = date.today()
     # Don't complain on offseason or weekend
     if today.month in (4, 5, 6, 7, 8, 9, 10) or today.isoweekday() in (6, 7):
         print(f"OK - {msg}")

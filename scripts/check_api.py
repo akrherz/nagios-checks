@@ -1,9 +1,9 @@
 """Ensure that /api/ is returning results."""
 
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
-import requests
+import httpx
 
 ENDPOINTS = {
     "MOS": "/mos.txt?station=KDSM&model=GFS",
@@ -15,13 +15,13 @@ ENDPOINTS = {
 def main(argv):
     """Go Main Go."""
     uri = f"https://iem-web-services.agron.iastate.edu{ENDPOINTS[argv[1]]}"
-    sts = datetime.utcnow()
+    sts = datetime.now(timezone.utc)
     try:
-        req = requests.get(uri, timeout=20)
+        req = httpx.get(uri, timeout=20)
         status_code = req.status_code
     except Exception:
         status_code = 999
-    ets = datetime.utcnow()
+    ets = datetime.now(timezone.utc)
 
     tt = "OK" if status_code == 200 else "CRITICAL"
     tm = (ets - sts).total_seconds()

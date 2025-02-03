@@ -2,11 +2,11 @@
 Get some stats from the pg_stat_database view
 """
 
-import datetime
 import getpass
 import json
 import os
 import sys
+from datetime import datetime
 
 # Third party
 import psycopg2
@@ -33,7 +33,7 @@ def read_stats():
         # remove the file
         os.unlink(FN)
         return None
-    payload["valid"] = datetime.datetime.strptime(
+    payload["valid"] = datetime.strptime(
         payload["valid"], "%Y-%m-%dT%H:%M:%SZ"
     )
     return payload
@@ -57,7 +57,7 @@ def check():
     row = icursor.fetchone()
     pgconn.close()
     return {
-        "valid": datetime.datetime.utcnow(),
+        "valid": datetime.utcnow(),
         "backends": float(row[0]),
         "xacts": float(row[1]),
     }

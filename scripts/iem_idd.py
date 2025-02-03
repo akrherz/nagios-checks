@@ -2,11 +2,11 @@
 Nagios check to make sure we have data flowing through LDM
 """
 
-import datetime
 import json
 import os
 import stat
 import sys
+from datetime import datetime, timezone
 
 
 def main():
@@ -16,11 +16,11 @@ def main():
     with open(fn.replace("png", "json"), encoding="ascii") as fh:
         data = json.load(fh)
     fmt = "%Y-%m-%dT%H:%M:%SZ"
-    valid = datetime.datetime.strptime(data["meta"]["valid"], fmt)
-    valid = valid.replace(tzinfo=datetime.timezone.utc)
-    now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+    valid = datetime.strptime(data["meta"]["valid"], fmt)
+    valid = valid.replace(tzinfo=timezone.utc)
+    now = datetime.now(timezone.utc)
     mtime = os.stat(fn)[stat.ST_MTIME]
-    ts = datetime.datetime.fromtimestamp(mtime, tz=datetime.timezone.utc)
+    ts = datetime.fromtimestamp(mtime, tz=timezone.utc)
     ts = min([ts, valid])
     diff = (now - ts).days * 86400.0 + (now - ts).seconds
     if diff < 600:

@@ -2,17 +2,17 @@
 Make sure our nexrad files are current!
 """
 
-import datetime
 import os
 import stat
 import sys
+from datetime import datetime
 
 SAMPLES = ["KDMX", "KAMA", "KLWX", "KFFC", "KBMX", "KBGM", "KCLE"]
 
 
 def check():
     """Check things please"""
-    now = datetime.datetime.now()
+    now = datetime.now()
     missing = []
     for nexrad in SAMPLES:
         fn = f"/mnt/level2/raw/{nexrad}/dir.list"
@@ -20,7 +20,7 @@ def check():
             missing.append(nexrad)
             continue
         mtime = os.stat(fn)[stat.ST_MTIME]
-        ts = datetime.datetime.fromtimestamp(mtime)
+        ts = datetime.fromtimestamp(mtime)
         diff = (now - ts).days * 86400.0 + (now - ts).seconds
         if diff > 300:
             missing.append(nexrad)

@@ -4,9 +4,9 @@
 NOTE: This needs to be exec for apache to use for CGI
 """
 
-import datetime
 import json
 import sys
+from datetime import datetime
 
 import rrdtool
 
@@ -51,7 +51,7 @@ def main():
     """Go Main Go"""
     j = {
         "stats": {},
-        "valid": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "valid": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
     get_reqs(j)
     get_telemetry(j)

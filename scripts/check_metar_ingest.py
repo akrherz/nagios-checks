@@ -4,7 +4,7 @@ Check how much METAR data we have
 
 import sys
 
-from pyiem.util import get_dbconn
+from pyiem.database import get_dbconn
 
 
 def check():

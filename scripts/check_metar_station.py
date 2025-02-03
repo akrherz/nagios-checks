@@ -3,17 +3,17 @@
 python check_metar_station.py <network> <id> <minute_of_synop>
 """
 
-import datetime
 import sys
+from datetime import datetime, timedelta
 
-from pyiem.util import get_dbconn
+from pyiem.database import get_dbconn
 
 
 def check(network, station, minute):
     """Do the check"""
     # Do IEMaccess
     res = {"rt_temp": "M", "arch_temp": "M"}
-    now = datetime.datetime.now() - datetime.timedelta(minutes=75)
+    now = datetime.now() - timedelta(minutes=75)
     res["rt_valid"] = now.replace(minute=minute, second=0, microsecond=0)
     pgconn = get_dbconn("iem", user="nobody")
     icursor = pgconn.cursor()
@@ -26,7 +26,7 @@ def check(network, station, minute):
         row = icursor.fetchone()
         res["rt_temp"] = "NaN" if row[0] is None else int(row[0])
     # Do ASOS
-    now = datetime.datetime.now() - datetime.timedelta(minutes=135)
+    now = datetime.now() - timedelta(minutes=135)
     res["arch_valid"] = now.replace(minute=minute, second=0, microsecond=0)
     pgconn = get_dbconn("asos", user="nobody")
     icursor = pgconn.cursor()

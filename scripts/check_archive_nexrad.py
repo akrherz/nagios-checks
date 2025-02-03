@@ -2,16 +2,16 @@
 Make sure we have archived N0R/N0Q so that things do not freak out!
 """
 
-import datetime
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 
 
 def main(argv):
     """Do Great Things!"""
     prod = argv[1]
-    now = datetime.datetime.utcnow()
-    now = now - datetime.timedelta(minutes=now.minute % 5)
+    now = datetime.now(timezone.utc)
+    now = now - timedelta(minutes=now.minute % 5)
     base = now
 
     miss = []
@@ -21,7 +21,7 @@ def main(argv):
         )
         if not os.path.isfile(fn):
             miss.append(now.strftime("%Y%m%d_%H%M"))
-        now -= datetime.timedelta(minutes=5)
+        now -= timedelta(minutes=5)
 
     if not miss:
         print("OK")

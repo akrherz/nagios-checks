@@ -2,9 +2,9 @@
 Check the production of N0Q data!
 """
 
-import datetime
 import json
 import sys
+from datetime import datetime
 
 
 def main(argv):
@@ -13,13 +13,11 @@ def main(argv):
     fn = f"/mesonet/ldmdata/gis/images/4326/USCOMP/{prod}_0.json"
     with open(fn, encoding="utf-8") as fp:
         j = json.load(fp)
-    prodtime = datetime.datetime.strptime(
-        j["meta"]["valid"], "%Y-%m-%dT%H:%M:%SZ"
-    )
+    prodtime = datetime.strptime(j["meta"]["valid"], "%Y-%m-%dT%H:%M:%SZ")
     radarson = int(j["meta"]["radar_quorum"].split("/")[0])
     gentime = j["meta"]["processing_time_secs"]
 
-    utcnow = datetime.datetime.utcnow()
+    utcnow = datetime.utcnow()
     latency = (utcnow - prodtime).total_seconds()
 
     stats = f"gentime={gentime};180;240;300 radarson={radarson};100;75;50"

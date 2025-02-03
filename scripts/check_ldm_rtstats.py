@@ -32,18 +32,18 @@ chico.unidata.ucar.edu_v_metfs1.agron.iastate.edu
 6.10.1
 """
 
-import datetime
 import glob
 import os
 import stat
 import sys
+from datetime import datetime
 
 
 def get_fileage(fn):
     """Return the age of the file in seconds"""
-    now = datetime.datetime.now()
+    now = datetime.now()
     mtime = os.stat(fn)[stat.ST_MTIME]
-    ts = datetime.datetime.fromtimestamp(mtime)
+    ts = datetime.fromtimestamp(mtime)
     return (now - ts).total_seconds()
 
 
