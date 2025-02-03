@@ -1,9 +1,9 @@
 """Make sure we are producing webcam lapses!"""
 
-import datetime
 import os
 import stat
 import sys
+from datetime import datetime
 
 BASEDIR = "/mesonet/share/lapses/auto"
 
@@ -11,11 +11,11 @@ BASEDIR = "/mesonet/share/lapses/auto"
 def check():
     """Do the actual check"""
     good = 0
-    now = datetime.datetime.now()
+    now = datetime.now()
     for filename in os.listdir(BASEDIR):
         fn = f"{BASEDIR}/{filename}"
         mtime = os.stat(fn)[stat.ST_MTIME]
-        ts = datetime.datetime.fromtimestamp(mtime)
+        ts = datetime.fromtimestamp(mtime)
         diff = (now - ts).days * 86400.0 + (now - ts).seconds
         if diff < 86400:
             good += 1

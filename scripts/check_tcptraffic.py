@@ -1,12 +1,10 @@
 """Wrote my own tcptraffic nagios script, sigh"""
 
-from __future__ import print_function
-
-import datetime
 import getpass
 import json
 import os
 import sys
+from datetime import datetime
 
 
 def compute_rate(old, new, seconds):
@@ -29,7 +27,7 @@ def read_stats(device):
         # remove the file
         os.unlink(fn)
         return None
-    payload["valid"] = datetime.datetime.strptime(
+    payload["valid"] = datetime.strptime(
         payload["valid"], "%Y-%m-%dT%H:%M:%SZ"
     )
     return payload
@@ -54,9 +52,7 @@ def get_stats(device):
             rxbytes = int(tokens[1])
             txbytes = int(tokens[9])
             payload = dict(
-                valid=datetime.datetime.utcnow().strftime(
-                    "%Y-%m-%dT%H:%M:%SZ"
-                ),
+                valid=datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
                 rxbytes=rxbytes,
                 txbytes=txbytes,
                 device=device,
@@ -77,8 +73,8 @@ def main(argv):
         print("NOTICE - initializing counter")
         return 0
     # need to support rhel6 hosts, so no total_seconds()
-    seconds = (datetime.datetime.utcnow() - old["valid"]).days * 86400 + (
-        datetime.datetime.utcnow() - old["valid"]
+    seconds = (datetime.utcnow() - old["valid"]).days * 86400 + (
+        datetime.utcnow() - old["valid"]
     ).seconds
     if seconds < 1 or seconds > 700:
         print(f"NOTICE - seconds timer is too large {seconds}")

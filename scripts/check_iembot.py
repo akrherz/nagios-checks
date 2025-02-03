@@ -1,17 +1,17 @@
 """Ensure iembot is up."""
 
-import datetime
 import sys
+from datetime import datetime
 
-import requests
+import httpx
 
 
 def main():
     """Go Main Go."""
     try:
-        sts = datetime.datetime.now()
-        req = requests.get("http://iembot:9003/status", timeout=30)
-        timing = (datetime.datetime.now() - sts).total_seconds()
+        sts = datetime.now()
+        req = httpx.get("http://iembot:9003/status", timeout=30)
+        timing = (datetime.now() - sts).total_seconds()
     except Exception as exp:
         print(f"CRITICAL - {exp}")
         return 2

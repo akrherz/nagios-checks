@@ -2,26 +2,28 @@
 Measure how fast the ASOS database is responding to queries for data!
 """
 
-import datetime
 import sys
+from datetime import datetime
 
-from pyiem.util import get_dbconn
+from pyiem.database import get_sqlalchemy_conn, sql_helper
 
 
 def check():
     """Do the check"""
-    pgconn = get_dbconn("asos", user="nobody")
-    icursor = pgconn.cursor()
-    icursor.execute(
-        f"""
-    SELECT station, count(*), min(tmpf), max(tmpf)
-    from t{datetime.datetime.now().year} WHERE station =
-    (select id from stations where network ~* 'ASOS' and online and
-    archive_begin < '1980-01-01'
-    ORDER by random() ASC LIMIT 1) GROUP by station
-    """
-    )
-    row = icursor.fetchone()
+    with get_sqlalchemy_conn("asos", user="nobody") as pgconn:
+        res = pgconn.execute(
+            sql_helper(
+                """
+        SELECT station, count(*), min(tmpf), max(tmpf)
+        from {table} WHERE station =
+        (select id from stations where network ~* 'ASOS' and online and
+        archive_begin < '1980-01-01'
+        ORDER by random() ASC LIMIT 1) GROUP by station
+        """,
+                table=f"t{datetime.now().year}",
+            )
+        )
+        row = res.fetchone()
     if row is None:
         return "XXX", 0
     return row[0], row[1]
@@ -29,9 +31,9 @@ def check():
 
 def main():
     """Go Main"""
-    t0 = datetime.datetime.now()
+    t0 = datetime.now()
     station, count = check()
-    t1 = datetime.datetime.now()
+    t1 = datetime.now()
     delta = (t1 - t0).seconds + float((t1 - t0).microseconds) / 1000000.0
     msg = f"{station} {count} |qtime={delta:.3f};5;10;15"
     if delta < 5:

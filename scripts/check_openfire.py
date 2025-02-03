@@ -2,12 +2,12 @@
 
 import sys
 
-import requests
+import httpx
 
 
 def main():
     """Go Main Go"""
-    req = requests.get("http://iem-openfire:7070")
+    req = httpx.get("http://iem-openfire:7070")
     if req.status_code == 200:
         print("OK")
         return 0
