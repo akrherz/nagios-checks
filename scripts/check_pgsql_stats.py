@@ -6,7 +6,7 @@ import getpass
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Third party
 import psycopg2
@@ -35,7 +35,7 @@ def read_stats():
         return None
     payload["valid"] = datetime.strptime(
         payload["valid"], "%Y-%m-%dT%H:%M:%SZ"
-    )
+    ).replace(tzinfo=timezone.utc)
     return payload
 
 
@@ -57,7 +57,7 @@ def check():
     row = icursor.fetchone()
     pgconn.close()
     return {
-        "valid": datetime.utcnow(),
+        "valid": datetime.now(timezone.utc),
         "backends": float(row[0]),
         "xacts": float(row[1]),
     }
@@ -74,7 +74,7 @@ def main():
     seconds = (current["valid"] - old["valid"]).total_seconds()
     qps = compute_rate(old["xacts"], current["xacts"], seconds)
     print(
-        f"TCPTRAFFIC OK - {qps:.1f} qps | "
+        f"OK - {qps:.1f} qps | "
         f"QPS={(qps):.1f};4000;5000 BACKENDS={current['backends']:.0f};; "
     )
     return 0
