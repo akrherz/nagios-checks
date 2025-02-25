@@ -37,7 +37,7 @@ def main():
     except Exception:
         last = None
     try:
-        resp = httpx.get("http://iembot:8080/nginx_status", timeout=30)
+        resp = httpx.get("http://localhost:8080/nginx_status", timeout=30)
         resp.raise_for_status()
     except Exception as exp:
         print(f"CRITICAL - {exp}")
