@@ -71,6 +71,7 @@ def main():
         write_stats(current)
         print("OK - first run")
         return 0
+    write_stats(current)
     seconds = (current["valid"] - old["valid"]).total_seconds()
     qps = compute_rate(old["xacts"], current["xacts"], seconds)
     print(
