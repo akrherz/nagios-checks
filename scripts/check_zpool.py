@@ -8,7 +8,7 @@ def main(argv) -> int:
     """Go Main Go."""
     pool = "tank" if len(argv) == 1 else argv[1]
     with subprocess.Popen(
-        ["zpool", "iostat", "-H", "-p", "-l", "-q", pool, "1", "2"],
+        ["/usr/sbin/zpool", "iostat", "-H", "-p", "-l", "-q", pool, "1", "2"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ) as proc:
