@@ -1,0 +1,58 @@
+
+name: CI
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    defaults:
+      run:
+        # Ensures environment gets sourced right
+        shell: bash -l -e {0}
+    name: Python (${{ matrix.PYTHON_VERSION }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        PYTHON_VERSION: ["3.13"]
+    env:
+      PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
+    steps:
+
+    - uses: actions/checkout@v5
+
+    - name: Run IEM Database container
+      run: |
+        docker run -d --name iem_database -p 5432:5432 ghcr.io/akrherz/iem_database:test_data
+        until docker exec iem_database pg_isready -h localhost; do
+          sleep 6
+        done
+
+    - name: Run Memcached container
+      run: |
+        docker run -d --name iem_memcached -p 11211:11211 memcached:1.6.9
+
+    - name: Add /etc/hosts entries
+      run: |
+        cat .github/workflows/etchosts.txt | sudo tee -a /etc/hosts
+
+    # setup conda-forge with micromamba
+    - name: Setup Python
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-file: environment.yml
+        condarc: |
+          channels:
+            - conda-forge
+            - defaults
+        create-args: >-
+          python=${{ env.PYTHON_VERSION }}
+        environment-name: prod
+        cache-environment: true
+
+    - name: Run Tests
+      run: |
+        set -x -e
+        sh tests/run_all_scripts.sh
