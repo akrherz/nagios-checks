@@ -7,8 +7,11 @@ import sys
 from datetime import datetime, timedelta, timezone
 
 
-def main(argv):
+def main(argv) -> int:
     """Do Great Things!"""
+    if len(argv) != 2:
+        print(f"Usage: {argv[0]} N0R|N0Q")
+        return 2
     prod = argv[1]
     now = datetime.now(timezone.utc)
     now = now - timedelta(minutes=now.minute % 5)

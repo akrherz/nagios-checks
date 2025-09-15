@@ -26,6 +26,9 @@ def check(dbname):
 
 def main(argv):
     """Go Main Go."""
+    if len(argv) != 2:
+        print(f"USAGE: {argv[0]} dbname")
+        return 2
     dbname, count = check(argv[1])
     msg = f"{count} {dbname} |count={count};201000000;205000000;220000000"
     if count < 201000000:

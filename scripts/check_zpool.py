@@ -2,20 +2,25 @@
 
 import subprocess
 import sys
+from pathlib import Path
 
 
 def main(argv) -> int:
     """Go Main Go."""
     pool = "tank" if len(argv) == 1 else argv[1]
+    zpool = Path("/usr/sbin/zpool")
+    if not zpool.exists():
+        print("UNKNOWN - /usr/sbin/zpool does not exist")
+        return 2
     with subprocess.Popen(
-        ["/usr/sbin/zpool", "iostat", "-H", "-p", "-l", "-q", pool, "1", "2"],
+        [zpool, "iostat", "-H", "-p", "-l", "-q", pool, "1", "2"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     ) as proc:
         out, err = proc.communicate()
         if proc.returncode != 0:
             print(f"Error retrieving zpool stats: {err.decode().strip()}")
-            return 3
+            return 2
         stats = out.decode().strip().splitlines()[1]
     tokens = stats.split()
     columns = (

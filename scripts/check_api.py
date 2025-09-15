@@ -14,6 +14,9 @@ ENDPOINTS = {
 
 def main(argv):
     """Go Main Go."""
+    if len(argv) != 2:
+        print(f"Usage: {argv[0]} {'|'.join(ENDPOINTS.keys())}")
+        return 2
     uri = f"https://iem-web-services.agron.iastate.edu{ENDPOINTS[argv[1]]}"
     sts = datetime.now(timezone.utc)
     try:

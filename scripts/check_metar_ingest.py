@@ -23,6 +23,9 @@ def check():
 
 def main():
     """Go Main"""
+    if len(sys.argv) != 2:
+        print("Usage: check_metar_ingest.py <iemdb host>")
+        sys.exit(3)
     count = check()
     stats = f"{count} count |count={count};1000;5000;10000"
     if count > 3000:
