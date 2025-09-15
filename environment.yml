@@ -1,35 +1,4 @@
 dependencies:
-  # Some of these are not hard requirements, but attempting to avoid pip
-  # installing these for pyiem
-  - affine
-  - cartopy_offlinedata
-  # only a util requirement
-  - click
-  - coverage
-  - cython
-  - defusedxml
-  - fiona
-  - gdal>=3.10,<3.11
-  - geos
-  # downloading stuff
-  - httpx
-  # Temporary solver help, REMOVEME
-  - libnetcdf=4.9.2
-  - matplotlib-base
-  - metpy
-  - metar>=1.7.0
-  - mock
-  - netCDF4
-  - numpy
-  - pandas
-  # webutil
-  - paste
-  - psycopg
-  # Models
-  - pydantic
-  - pymemcache
-  - pyproj
-  - setuptools_scm
-  - sqlalchemy
-  # iemre
-  - xarray
+  # discipline daryl, only use releases!
+  - pyiem
+  - rrdtool
