@@ -12,8 +12,9 @@ from pathlib import Path
 
 def main() -> int:
     """Go Main Go."""
-    fn = Path("/mesonet/ldmdata/gis/images/4326/USCOMP/n0q_0.png")
-    if not fn.exists():
+    fn = "/mesonet/ldmdata/gis/images/4326/USCOMP/n0q_0.png"
+    path = Path(fn)
+    if not path.exists():
         print("CRITICAL - n0q_0.png does not exist")
         return 2
     # Ensure that our JSON file is working too per 23 May 2023 explosion

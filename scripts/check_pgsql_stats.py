@@ -8,8 +8,7 @@ import os
 import sys
 from datetime import datetime, timezone
 
-# Third party
-import psycopg2
+from pyiem.database import get_dbconn
 
 FN = f"/tmp/check_pgsql_stats_py_{getpass.getuser()}"
 
@@ -48,7 +47,7 @@ def write_stats(payload):
 
 def check():
     """Do the database check."""
-    pgconn = psycopg2.connect("dbname=postgres user=nobody")
+    pgconn = get_dbconn("postgres", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
         "select sum(numbackends), sum(xact_commit + xact_rollback) "
