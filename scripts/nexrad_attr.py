@@ -2,20 +2,20 @@
 
 import sys
 
-from pyiem.util import get_dbconn
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from sqlalchemy.engine import Connection
 
 
-def main():
+@with_sqlalchemy_conn("radar", user="nobody")
+def main(conn: Connection | None = None) -> int:
     """Go Main Go"""
-    pgconn = get_dbconn("radar", user="nobody")
-    pcursor = pgconn.cursor()
-
-    pcursor.execute(
-        "select count(*) from nexrad_attributes WHERE "
-        "valid > now() - '30 minutes'::interval"
+    res = conn.execute(
+        sql_helper(
+            "select count(*) from nexrad_attributes WHERE "
+            "valid > now() - '30 minutes'::interval"
+        )
     )
-    row = pcursor.fetchone()
-    count = row[0]
+    count = res.fetchone()[0]
 
     msg = f"L3 NEXRAD attr count {count} |count={count};2;1;0"
     if count > 2:

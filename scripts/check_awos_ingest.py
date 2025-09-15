@@ -2,20 +2,22 @@
 
 import sys
 
-from pyiem.util import get_dbconn
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from sqlalchemy.engine import Connection
 
 
-def check():
+@with_sqlalchemy_conn("iem", user="nobody")
+def check(conn: Connection | None = None) -> int:
     """Do the check"""
-    pgconn = get_dbconn("iem", user="nobody")
-    icursor = pgconn.cursor()
-    icursor.execute(
-        "SELECT count(*) from current_log c JOIN stations s on "
-        "(s.iemid = c.iemid) WHERE network = 'IA_ASOS' and "
-        "valid > now() - '75 minutes'::interval and "
-        "extract(minute from valid) not in (15, 35, 55)"
+    res = conn.execute(
+        sql_helper(
+            "SELECT count(*) from current_log c JOIN stations s on "
+            "(s.iemid = c.iemid) WHERE network = 'IA_ASOS' and "
+            "valid > now() - '75 minutes'::interval and "
+            "extract(minute from valid) not in (15, 35, 55)"
+        )
     )
-    return icursor.fetchone()[0]
+    return res.fetchone()[0]
 
 
 def main():

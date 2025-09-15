@@ -2,26 +2,29 @@
 A crude check for IEM Webfarm nodes against the NFS archive.
 """
 
-import pathlib
 import random
 import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 
 
-def main():
+def main() -> int:
     """Go Main Go."""
     # Pick a time modulo five over the past 3 days
     now = datetime.now() - timedelta(minutes=10)
     now = now.replace(minute=0)
     offset = random.randint(0, 12 * 24 * 3) * 5
     now = now - timedelta(minutes=offset)
-    pngfn = (
+    pngfn = Path(
         f"/mesonet/ARCHIVE/data/{now:%Y/%m/%d}/GIS/uscomp/n0q_"
         f"{now:%Y%m%d%H%M}.png"
     )
+    if not pngfn.exists():
+        print(f"CRITICAL - {pngfn} does not exist!")
+        return 2
     # Check 1, stat
     sts = datetime.now()
-    pathlib.Path(pngfn).stat
+    pngfn.stat()
     stat_secs = (datetime.now() - sts).total_seconds()
 
     # Check 2, read

@@ -3,24 +3,28 @@
 import sys
 from datetime import timedelta
 
-from pyiem.util import get_dbconn, utc
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from pyiem.util import utc
+from sqlalchemy.engine import Connection
 
 
-def main():
+@with_sqlalchemy_conn("id3b", user="nobody")
+def main(conn: Connection | None = None) -> int:
     """Do some auditing."""
     utcnow = utc().replace(second=0, microsecond=0)
     # Go find this product in the afos database
-    cursor = get_dbconn("id3b", user="nobody").cursor()
-    cursor.execute(
-        "SELECT entered_at, valid_at, wmo_valid_at, awips_id from "
-        "ldm_product_log where awips_id in ('TSTNCF', 'WTSNCF') and "
-        "entered_at > %s ORDER by wmo_valid_at DESC LIMIT 1",
-        (utcnow - timedelta(minutes=15),),
+    res = conn.execute(
+        sql_helper(
+            "SELECT entered_at, valid_at, wmo_valid_at, awips_id from "
+            "ldm_product_log where awips_id in ('TSTNCF', 'WTSNCF') and "
+            "entered_at > :sts ORDER by wmo_valid_at DESC LIMIT 1"
+        ),
+        {"sts": utcnow - timedelta(minutes=15)},
     )
-    if cursor.rowcount == 0:
+    if res.rowcount == 0:
         print("TSTNCF,WTSNCF missing in ldm_product_log")
         return 1
-    row = cursor.fetchone()
+    row = res.fetchone()
     if (utcnow - row[2]) > timedelta(minutes=10):
         print(f"TSTNCF,WTSNCF wmo_valid_at is too old {row[2]}")
         return 1

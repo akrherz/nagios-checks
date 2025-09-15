@@ -9,6 +9,9 @@ from datetime import datetime
 
 def main(argv):
     """Do Great Things"""
+    if len(argv) != 2:
+        print(__doc__)
+        return 2
     prod = argv[1]
     fn = f"/mesonet/ldmdata/gis/images/4326/USCOMP/{prod}_0.json"
     with open(fn, encoding="utf-8") as fp:

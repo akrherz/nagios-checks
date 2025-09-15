@@ -7,25 +7,29 @@ lots of writes and autovac sometimes can not keep up.
 
 import sys
 
-# Third party
-import psycopg2
+from pyiem.database import get_dbconn
 
 
 def check(dbname):
     """Do the database check."""
-    pgconn = psycopg2.connect(f"dbname={dbname} user=nobody")
+    pgconn = get_dbconn(dbname, host="localhost", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
         "SELECT datname, age(datfrozenxid) FROM pg_database "
         "ORDER by age DESC LIMIT 1"
     )
     row = icursor.fetchone()
+    icursor.close()
+    pgconn.close()
 
     return row
 
 
 def main(argv):
     """Go Main Go."""
+    if len(argv) != 2:
+        print(f"USAGE: {argv[0]} dbname")
+        return 2
     dbname, count = check(argv[1])
     msg = f"{count} {dbname} |count={count};201000000;205000000;220000000"
     if count < 201000000:

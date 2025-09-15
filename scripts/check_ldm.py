@@ -13,43 +13,46 @@ getTime(), getLoad(), getPortCount(), getPq(), getCpu()
 
 """
 
-import os
 import subprocess
 import sys
+from pathlib import Path
 
 
-def find_ldmpath():
+def find_ldmpath() -> Path | None:
     """Figure out where LDM is."""
     for username in ["ldm", "meteor_ldm"]:
-        fn = f"/home/{username}/bin/ldmadmin"
-        if os.path.isfile(fn):
-            return f"/home/{username}/bin"
+        fn = Path(f"/home/{username}/bin/ldmadmin")
+        if fn.exists():
+            return fn.parent
     return None
 
 
-def main():
+def main() -> int:
     """Go Main Go."""
     ldmpath = find_ldmpath()
+    if ldmpath is None:
+        print("CRITICAL - can not find ldmadmin")
+        return 2
     with subprocess.Popen(
-        [f"{ldmpath}/ldmadmin", "printmetrics"],
+        [ldmpath / "ldmadmin", "printmetrics"],
         stdout=subprocess.PIPE,
     ) as proc:
         data = proc.stdout.read().decode("ascii").strip()
     tokens = data.split()
     if len(tokens) != 18:
         print(f"CRITICAL - can not parse output {data} ")
-        sys.exit(2)
+        return 2
 
     # Get pqmon stats
     with subprocess.Popen(
-        [f"{ldmpath}/pqmon", "-S"],
+        [ldmpath / "pqmon", "-S"],
         stdout=subprocess.PIPE,
     ) as proc:
         data = proc.stdout.read().decode("ascii").strip()
     pqmon_tokens = data.split()
     if len(pqmon_tokens) != 12:
         print(f"CRITICAL - can not parse pqmon output {data} ")
-        sys.exit(2)
+        return 2
 
     queue_size_total = int(pqmon_tokens[1])
     queue_size_used = int(pqmon_tokens[3])

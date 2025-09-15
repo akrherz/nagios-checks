@@ -1,14 +1,22 @@
 """Check a raster file and count the number of non-zero values."""
 
 import sys
+from pathlib import Path
 
 import numpy
 from osgeo import gdal
 
+gdal.UseExceptions()
+
 
 def main():
     """Go Main Go."""
-    ntp = gdal.Open("/mesonet/ldmdata/gis/images/4326/USCOMP/ntp_0.png")
+    fn = "/mesonet/ldmdata/gis/images/4326/USCOMP/ntp_0.png"
+    path = Path(fn)
+    if not path.exists():
+        print("CRITICAL - ntp_0.png does not exist")
+        return 2
+    ntp = gdal.Open(fn)
     data = ntp.ReadAsArray()
     count = numpy.sum(numpy.where(data > 0, 1, 0))
     sz = data.shape[0] * data.shape[1]

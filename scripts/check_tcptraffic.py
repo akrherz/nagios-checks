@@ -62,6 +62,9 @@ def get_stats(device):
 
 def main(argv):
     """Go Main Go"""
+    if len(argv) != 2:
+        print(f"Usage: {argv[0]} <device>")
+        return 2
     device = argv[1]
     old = read_stats(device)
     current = get_stats(device)

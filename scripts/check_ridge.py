@@ -2,10 +2,9 @@
 Make sure we have current RIDGE imagery
 """
 
-import os
-import stat
 import sys
 from datetime import datetime
+from pathlib import Path
 
 SAMPLES = ["DVN", "GRK", "ABC", "DTX", "HTX", "LOT", "TLX"]
 
@@ -15,8 +14,11 @@ def check():
     now = datetime.now()
     count = []
     for nexrad in SAMPLES:
-        fn = f"/mesonet/ldmdata/gis/images/4326/ridge/{nexrad}/N0B_0.png"
-        mtime = os.stat(fn)[stat.ST_MTIME]
+        fn = Path(f"/mesonet/ldmdata/gis/images/4326/ridge/{nexrad}/N0B_0.png")
+        if not fn.exists():
+            count.append(nexrad)
+            continue
+        mtime = fn.stat().st_mtime
         ts = datetime.fromtimestamp(mtime)
         diff = (now - ts).days * 86400.0 + (now - ts).seconds
         if diff > 600:

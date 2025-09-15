@@ -41,8 +41,11 @@ def check(network, station, minute):
     return res
 
 
-def main(argv):
+def main(argv) -> int:
     """Go Main"""
+    if len(argv) != 4:
+        print(__doc__)
+        return 2
     network = argv[1]
     station = argv[2]
     minute = int(argv[3])
@@ -58,9 +61,9 @@ def main(argv):
         f"|rttemp={res['rt_temp']};;; archtemp={res['arch_temp']};;;"
     )
     if msg == "OK":
-        sys.exit(0)
-    sys.exit(2)
+        return 0
+    return 2
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    sys.exit(main(sys.argv))

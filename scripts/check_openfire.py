@@ -5,14 +5,16 @@ import sys
 import httpx
 
 
-def main():
+def main() -> int:
     """Go Main Go"""
-    req = httpx.get("http://iem-openfire:7070")
-    if req.status_code == 200:
-        print("OK")
-        return 0
-    print("FATAL")
-    return 2
+    try:
+        resp = httpx.get("http://iem-openfire:7070")
+        resp.raise_for_status()
+    except Exception as exp:
+        print(f"FATAL - {exp}")
+        return 2
+    print("OK")
+    return 0
 
 
 if __name__ == "__main__":

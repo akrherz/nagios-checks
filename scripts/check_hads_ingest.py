@@ -4,21 +4,20 @@ Check how much HADS data we have
 
 import sys
 
-from pyiem.util import get_dbconn
-
-IEM = get_dbconn("iem", user="nobody")
-icursor = IEM.cursor()
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from sqlalchemy.engine import Connection
 
 
-def check():
+@with_sqlalchemy_conn("iem", user="nobody")
+def check(conn: Connection | None = None) -> int:
     """check!"""
-    icursor.execute(
-        "SELECT count(*) from current_shef "
-        "WHERE valid > now() - '1 hour'::interval"
+    res = conn.execute(
+        sql_helper(
+            "SELECT count(*) from current_shef "
+            "WHERE valid > now() - '1 hour'::interval"
+        )
     )
-    row = icursor.fetchone()
-
-    return row[0]
+    return res.fetchone()[0]
 
 
 def main():

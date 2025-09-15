@@ -4,21 +4,21 @@ See how much BUFR surface data we got.
 
 import sys
 
-from pyiem.util import get_dbconn
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from sqlalchemy.engine import Connection
 
 
-def check():
+@with_sqlalchemy_conn("iem", user="nobody")
+def check(conn: Connection | None = None) -> int:
     """Do the check"""
-    pgconn = get_dbconn("iem", host=sys.argv[1], user="nobody")
-    icursor = pgconn.cursor()
-    icursor.execute(
-        "SELECT count(*) from current c JOIN stations s on "
-        "(s.iemid = c.iemid) WHERE valid > now() - '75 minutes'::interval "
-        "and network = 'WMO_BUFR_SRF'"
+    res = conn.execute(
+        sql_helper(
+            "SELECT count(*) from current c JOIN stations s on "
+            "(s.iemid = c.iemid) WHERE valid > now() - '75 minutes'::interval "
+            "and network = 'WMO_BUFR_SRF'"
+        )
     )
-    row = icursor.fetchone()
-
-    return row[0]
+    return res.fetchone()[0]
 
 
 def main():
