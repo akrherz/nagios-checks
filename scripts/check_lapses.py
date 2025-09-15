@@ -4,8 +4,9 @@ import os
 import stat
 import sys
 from datetime import datetime
+from pathlib import Path
 
-BASEDIR = "/mesonet/share/lapses/auto"
+BASEDIR = Path("/mesonet/share/lapses/auto")
 
 
 def check():
@@ -24,6 +25,9 @@ def check():
 
 def main():
     """Go Main Go."""
+    if not BASEDIR.exists():
+        print(f"CRITICAL - {BASEDIR} does not exist!")
+        return 2
     good = check()
     msg = f"{good} good lapses"
     if good > 30:
