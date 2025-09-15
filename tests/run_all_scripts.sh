@@ -11,6 +11,7 @@ for script in scripts/*.py; do
     if echo "$se" | grep -q "Traceback"; then
         echo "Script $script produced a traceback:"
         finalexit=1
+        continue
     fi
     status=$?
     if [[ $status -ne 0 && $status -ne 1 && $status -ne 2 ]]; then
