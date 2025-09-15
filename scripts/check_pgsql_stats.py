@@ -47,7 +47,7 @@ def write_stats(payload):
 
 def check():
     """Do the database check."""
-    pgconn = get_dbconn("postgres", user="nobody")
+    pgconn = get_dbconn("postgres", host="localhost", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
         "select sum(numbackends), sum(xact_commit + xact_rollback) "

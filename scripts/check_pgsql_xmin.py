@@ -12,7 +12,7 @@ from pyiem.database import get_dbconn
 
 def check(dbname):
     """Do the database check."""
-    pgconn = get_dbconn(dbname, user="nobody")
+    pgconn = get_dbconn(dbname, host="localhost", user="nobody")
     icursor = pgconn.cursor()
     icursor.execute(
         "SELECT datname, age(datfrozenxid) FROM pg_database "

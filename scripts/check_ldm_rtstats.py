@@ -98,7 +98,7 @@ def main(argv):
     """Run for a given hostname and feedtype."""
     if len(argv) < 3:
         print("Usage: python check_ldm_rtstats.py <hostname> <feedtype>")
-        return 3
+        return 2
     return runner(argv[1], argv[2])
 
 

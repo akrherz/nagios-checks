@@ -2,4 +2,5 @@ dependencies:
   - gdal
   # discipline daryl, only use releases!
   - pyiem
+  - pytest
   - rrdtool

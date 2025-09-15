@@ -54,5 +54,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        set -x -e
-        sh tests/run_all_scripts.sh
+        pytest
