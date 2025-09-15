@@ -2,18 +2,20 @@
 
 import sys
 
-from pyiem.util import get_dbconn
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from sqlalchemy.engine import Connection
 
 
-def main():
+@with_sqlalchemy_conn("mesosite", user="nobody")
+def main(conn: Connection | None = None) -> int:
     """Go Main Go"""
-    pgconn = get_dbconn("mesosite", user="nobody")
-    cursor = pgconn.cursor()
-    cursor.execute(
-        "select count(*), avg(timing) from autoplot_timing "
-        "where valid > now() - '4 hours'::interval"
+    res = conn.execute(
+        sql_helper(
+            "select count(*), avg(timing) from autoplot_timing "
+            "where valid > now() - '4 hours'::interval"
+        )
     )
-    (count, speed) = cursor.fetchone()
+    (count, speed) = res.fetchone()
     speed = 0 if speed is None else speed
 
     print(

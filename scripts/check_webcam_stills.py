@@ -3,10 +3,12 @@
 import sys
 from datetime import timedelta
 
-from pyiem.util import get_dbconn
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from sqlalchemy.engine import Connection
 
 
-def main(argv):
+@with_sqlalchemy_conn("mesosite", user="nobody")
+def main(argv: list[str], conn: Connection | None = None) -> int:
     """Go Main Go."""
 
     networks = ["KCRG", "KCCI", "MCFC"]
@@ -15,15 +17,15 @@ def main(argv):
         networks = ["IDOT"]
         duration = 120
 
-    with get_dbconn("mesosite", user="nobody") as pgconn:
-        cursor = pgconn.cursor()
-        cursor.execute(
+    res = conn.execute(
+        sql_helper(
             "select count(*) from camera_current where "
-            "valid > now() - %s and "
-            "substr(cam, 1, 4) = ANY(%s)",
-            (timedelta(minutes=duration), networks),
-        )
-        count = cursor.fetchone()[0]
+            "valid > now() - :sts and "
+            "substr(cam, 1, 4) = ANY(:networks)"
+        ),
+        {"sts": timedelta(minutes=duration), "networks": networks},
+    )
+    count = res.fetchone()[0]
 
     msg = f"{count} images within {duration} minutes|count={count}"
     if count > 20:
