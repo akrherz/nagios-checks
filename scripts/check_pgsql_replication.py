@@ -2,20 +2,21 @@
 
 import sys
 
-# Third Party
-import psycopg2
+from pyiem.database import sql_helper, with_sqlalchemy_conn
+from sqlalchemy.engine import Connection
 
 
-def main():
+@with_sqlalchemy_conn("postgres", host="localhost", user="postgres")
+def main(conn: Connection | None = None) -> int:
     """Go Main Go."""
-    with psycopg2.connect(database="postgres", user="postgres") as pgconn:
-        cursor = pgconn.cursor()
-        cursor.execute(
+    res = conn.execute(
+        sql_helper(
             "SELECT pg_last_wal_receive_lsn() = pg_last_wal_replay_lsn() "
             "as synced, (EXTRACT(EPOCH FROM now()) - "
             "EXTRACT(EPOCH FROM pg_last_xact_replay_timestamp()))::int AS lag"
         )
-        row = cursor.fetchone()
+    )
+    row = res.fetchone()
     # If synced, we are goldness, lag is effectively zero
     if row[0]:
         print("Synced |lag=0;60;120;240")
