@@ -18,7 +18,7 @@ def main():
     if not os.path.isfile(fn):
         print(f"ERROR: {fn} does not exist")
         return 2
-    with open(fn, "r", encoding="utf-8") as fh:
+    with open(fn, encoding="utf-8") as fh:
         data = fh.readlines()
     if len(data) != 4:
         print("WARNING - Could not read file!")

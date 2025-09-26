@@ -26,7 +26,7 @@ def write_stats(payload: dict):
 def read_stats():
     """Read the stats from disk."""
     fn = f"/tmp/check_nginx_{getpass.getuser()}.json"
-    with open(fn, "r", encoding="utf-8") as fp:
+    with open(fn, encoding="utf-8") as fp:
         return json.load(fp)
 
 

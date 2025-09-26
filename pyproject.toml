@@ -1,11 +1,15 @@
 
 [tool.ruff]
 line-length = 79
-target-version = "py310"
+# Our EL9 hosts have python 3.9, so gasp
+target-version = "py39"
 
 [tool.ruff.lint]
 select = [
     "E",
     "F",
     "I",
+    "TYP",
+    "UP",  # pyupgrade rules
+    "FA",  # flake8-future-annotations
 ]

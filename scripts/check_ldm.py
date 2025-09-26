@@ -18,7 +18,7 @@ import sys
 from pathlib import Path
 
 
-def find_ldmpath() -> Path | None:
+def find_ldmpath():
     """Figure out where LDM is."""
     for username in ["ldm", "meteor_ldm"]:
         fn = Path(f"/home/{username}/bin/ldmadmin")
