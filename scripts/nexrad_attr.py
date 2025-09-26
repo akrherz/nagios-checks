@@ -1,9 +1,14 @@
 """Nagios check to make sure we have NEXRAD attribute data"""
 
+from __future__ import annotations
+
 import sys
+from typing import TYPE_CHECKING
 
 from pyiem.database import sql_helper, with_sqlalchemy_conn
-from sqlalchemy.engine import Connection
+
+if TYPE_CHECKING:
+    from sqlalchemy.engine import Connection
 
 
 @with_sqlalchemy_conn("radar", user="nobody")

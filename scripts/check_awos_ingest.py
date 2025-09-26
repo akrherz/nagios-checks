@@ -1,9 +1,14 @@
 """Check how much local AWOS data ingest we have."""
 
+from __future__ import annotations
+
 import sys
+from typing import TYPE_CHECKING
 
 from pyiem.database import sql_helper, with_sqlalchemy_conn
-from sqlalchemy.engine import Connection
+
+if TYPE_CHECKING:
+    from sqlalchemy.engine import Connection
 
 
 @with_sqlalchemy_conn("iem", user="nobody")

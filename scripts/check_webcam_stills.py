@@ -1,10 +1,15 @@
 """Check the acquistion of stills from the webcams."""
 
+from __future__ import annotations
+
 import sys
 from datetime import timedelta
+from typing import TYPE_CHECKING
 
 from pyiem.database import sql_helper, with_sqlalchemy_conn
-from sqlalchemy.engine import Connection
+
+if TYPE_CHECKING:
+    from sqlalchemy.engine import Connection
 
 
 @with_sqlalchemy_conn("mesosite", user="nobody")

@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        PYTHON_VERSION: ["3.13"]
+        # EL9 hosts have python 3.9, so alas
+        PYTHON_VERSION: ["3.9", "3.13"]
     env:
       PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
     steps:

@@ -1,9 +1,14 @@
 """Stats on how streaming replication is going."""
 
+from __future__ import annotations
+
 import sys
+from typing import TYPE_CHECKING
 
 from pyiem.database import sql_helper, with_sqlalchemy_conn
-from sqlalchemy.engine import Connection
+
+if TYPE_CHECKING:
+    from sqlalchemy.engine import Connection
 
 
 @with_sqlalchemy_conn("postgres", host="localhost", user="postgres")
