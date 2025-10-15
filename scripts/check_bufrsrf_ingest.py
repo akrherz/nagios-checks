@@ -16,12 +16,12 @@ if TYPE_CHECKING:
 @with_sqlalchemy_conn("iem", user="nobody")
 def check(conn: Connection | None = None) -> int:
     """Do the check"""
+    # 75 minutes seems to be too noisey
     res = conn.execute(
-        sql_helper(
-            "SELECT count(*) from current c JOIN stations s on "
-            "(s.iemid = c.iemid) WHERE valid > now() - '75 minutes'::interval "
-            "and network = 'WMO_BUFR_SRF'"
-        )
+        sql_helper("""
+    SELECT count(*) from current c JOIN stations s on (s.iemid = c.iemid)
+    WHERE valid > now() - '150 minutes'::interval and network = 'WMO_BUFR_SRF'
+                   """)
     )
     return res.fetchone()[0]
 
