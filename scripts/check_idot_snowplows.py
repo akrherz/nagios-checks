@@ -24,6 +24,9 @@ def main():
     row = pcursor.fetchone()
     count = row[0]
     daycount = row[1]
+    if count is None:
+        count = 0
+        daycount = 0
 
     msg = (
         f"snowplows {count}/{daycount} |"
