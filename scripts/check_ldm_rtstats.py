@@ -47,7 +47,7 @@ def get_fileage(fn):
     return (now - ts).total_seconds()
 
 
-def runner(hostname, feedtype):
+def runner(hostname: str, feedtype: str):
     """Do something!"""
     for username in ["ldm", "meteor_ldm"]:
         mm = feedtype if feedtype != "IDS" else "IDS|DDPLUS"
@@ -58,7 +58,7 @@ def runner(hostname, feedtype):
     min_latency = 1e6
     tot_bytes = 0
     tot_prods = 0
-    time_threshold = 120 if feedtype == "CONDUIT" else 15
+    time_threshold = 120 if feedtype in ["CONDUIT", "LIGHTNING"] else 15
     for fn in glob.glob("*_v_*"):
         # Skip a local feed
         if fn.find("missouri") > -1:
@@ -81,6 +81,8 @@ def runner(hostname, feedtype):
     thresholds = [300, 1200]
     if feedtype == "CONDUIT":
         thresholds = [600, 2400]
+    elif feedtype == "LIGHTNING":
+        thresholds = [1200, 3600]
     if min_latency < thresholds[0]:
         exitcode = 0
     elif min_latency < thresholds[1]:
