@@ -36,6 +36,7 @@ def main() -> int:
     with subprocess.Popen(
         [ldmpath / "ldmadmin", "printmetrics"],
         stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     ) as proc:
         data = proc.stdout.read().decode("ascii").strip()
     tokens = data.split()
@@ -47,6 +48,7 @@ def main() -> int:
     with subprocess.Popen(
         [ldmpath / "pqmon", "-S"],
         stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
     ) as proc:
         data = proc.stdout.read().decode("ascii").strip()
     pqmon_tokens = data.split()
