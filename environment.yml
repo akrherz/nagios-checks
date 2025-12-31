@@ -1,8 +1,5 @@
 dependencies:
-  # Help the solver
-  - gdal>=3.10,<3.11
-  - libnetcdf=4.9.2
   # discipline daryl, only use releases!
-  - pyiem
+  - pyiem>=1.26
   - pytest
   - rrdtool
