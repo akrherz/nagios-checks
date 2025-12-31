@@ -1,5 +1,5 @@
 dependencies:
   # discipline daryl, only use releases!
-  - pyiem>=1.26
+  - pyiem
   - pytest
   - rrdtool
