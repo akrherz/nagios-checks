@@ -36,7 +36,7 @@ def main(argv) -> int:
         "trimq_read_pend trimq_read_active "
         "rebuildq_read_pend rebuildq_read_active"
     ).split()
-    data = dict(zip(columns, tokens))
+    data = dict(zip(columns, tokens, strict=True))
     stats = []
     for key, val in data.items():
         if key == "pool" or val == "-":

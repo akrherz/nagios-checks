@@ -36,7 +36,7 @@ def main():
     ks = ["in_handler", "out_handler", "out_rack", "in_rack"]
     maxes = [80, 70, 100, 75]
     msg = ""
-    for k, d, m in zip(ks, v, maxes):
+    for k, d, m in zip(ks, v, maxes, strict=True):
         ds += f"{k}={d};{m};{m + 5};{m + 10} "
         msg += f"{k} {d},"
     if v[3] < 75:

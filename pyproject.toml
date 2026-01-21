@@ -1,8 +1,7 @@
 
 [tool.ruff]
 line-length = 79
-# Our EL9 hosts have python 3.9, so gasp
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [
