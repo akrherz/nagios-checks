@@ -6,6 +6,7 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = [
+    "B",
     "E",
     "F",
     "I",

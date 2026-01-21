@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         # EL9 hosts have python 3.9, so alas
-        PYTHON_VERSION: ["3.9", "3.13"]
+        PYTHON_VERSION: ["3.9", "3.14"]
     env:
       PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
     steps:
@@ -47,7 +47,6 @@ jobs:
         condarc: |
           channels:
             - conda-forge
-            - defaults
         create-args: >-
           python=${{ env.PYTHON_VERSION }}
         environment-name: prod
