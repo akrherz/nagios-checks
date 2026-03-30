@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from sqlalchemy.engine import Connection
 
 
-@with_sqlalchemy_conn("postgres", host="localhost", user="postgres")
+@with_sqlalchemy_conn("postgres", host="localhost", user="postgres", rw=False)
 def main(conn: Connection | None = None) -> int:
     """Go Main Go."""
     res = conn.execute(
