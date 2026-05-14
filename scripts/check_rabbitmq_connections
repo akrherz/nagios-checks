@@ -166,7 +166,7 @@ for my $metric (@metrics) {
     my $value = 0;
     $value = $values->{$metric} if defined $values->{$metric};
     # we should have 10-30 machines connected
-    my $code = $p->check_threshold(check => abs(20 - $value), warning => $warning, critical=> $critical);
+    my $code = $p->check_threshold(check => abs(40 - $value), warning => $warning, critical=> $critical);
     $p->add_message($code, sprintf("$metric ".$STATUS_TEXT{$code}." (%d)", $value)) ;
     $p->add_perfdata(label=>$metric, value => $value, warning=>$warning, critical=> $critical);
 }
