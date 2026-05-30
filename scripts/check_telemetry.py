@@ -9,10 +9,13 @@ from pyiem.database import get_sqlalchemy_conn, sql_helper
 def main():
     """Go Main Go"""
     with get_sqlalchemy_conn("mesosite", user="nobody") as conn:
+        # we have some database write delay, so look back 5 minutes
+        # over a 5 minute period
         df = pd.read_sql(
             sql_helper(
                 "select timing, status_code from website_telemetry "
-                "where valid > now() - '5 minutes'::interval"
+                "where valid > (now() - '10 minutes'::interval) and "
+                "valid < (now() - '5 minutes'::interval)"
             ),
             conn,
         )
