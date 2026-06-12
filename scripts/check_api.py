@@ -17,7 +17,8 @@ def main(argv):
     if len(argv) != 2:
         print(f"Usage: {argv[0]} {'|'.join(ENDPOINTS.keys())}")
         return 2
-    uri = f"https://iem-web-services.agron.iastate.edu{ENDPOINTS[argv[1]]}"
+    # direct to nginx attm
+    uri = f"http://iem-web-services.agron.iastate.edu:8080{ENDPOINTS[argv[1]]}"
     sts = datetime.now(timezone.utc)
     try:
         req = httpx.get(uri, timeout=20)
