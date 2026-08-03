@@ -8,7 +8,7 @@ import requests
 def main() -> int:
     """Go Main Go"""
     try:
-        resp = requests.get("http://xmpp.weather.im:7070")
+        resp = requests.get("http://xmpp.weather.im:7070", timeout=30)
         resp.raise_for_status()
     except Exception as exp:
         print(f"FATAL - {exp}")
