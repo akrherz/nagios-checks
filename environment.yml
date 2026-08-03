@@ -4,7 +4,7 @@ dependencies:
   - libnetcdf=4.9.2
   - pip
   # discipline daryl, only use releases!
-  - pyiem
+  - pyiem >=1.27.0
   - pytest
   - requests
   - rrdtool
