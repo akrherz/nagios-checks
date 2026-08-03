@@ -6,7 +6,7 @@ import re
 import sys
 from datetime import datetime, timezone
 
-import httpx
+import requests
 
 STATUS = re.compile(
     r"Active connections: (\d+)\s*\n"
@@ -37,7 +37,7 @@ def main():
     except Exception:
         last = None
     try:
-        resp = httpx.get("http://localhost:8080/nginx_status", timeout=30)
+        resp = requests.get("http://localhost:8080/nginx_status", timeout=30)
         resp.raise_for_status()
     except Exception as exp:
         print(f"CRITICAL - {exp}")
