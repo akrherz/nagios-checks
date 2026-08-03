@@ -3,7 +3,7 @@
 import sys
 from datetime import datetime, timezone
 
-import httpx
+import requests
 
 ENDPOINTS = {
     "MOS": "/mos.txt?station=KDSM&model=GFS",
@@ -21,8 +21,8 @@ def main(argv):
     uri = f"http://iem-web-services.agron.iastate.edu:8080{ENDPOINTS[argv[1]]}"
     sts = datetime.now(timezone.utc)
     try:
-        req = httpx.get(uri, timeout=20)
-        status_code = req.status_code
+        resp = requests.get(uri, timeout=20)
+        status_code = resp.status_code
     except Exception:
         status_code = 999
     ets = datetime.now(timezone.utc)

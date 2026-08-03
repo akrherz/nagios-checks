@@ -3,20 +3,20 @@
 import sys
 from datetime import datetime
 
-import httpx
+import requests
 
 
 def main():
     """Go Main Go."""
     try:
         sts = datetime.now()
-        req = httpx.get("http://iembot:9003/status", timeout=30)
+        resp = requests.get("http://iembot:9003/status", timeout=30)
         timing = (datetime.now() - sts).total_seconds()
     except Exception as exp:
         print(f"CRITICAL - {exp}")
         return 2
-    if req.status_code == 200:
-        js = req.json()
+    if resp.status_code == 200:
+        js = resp.json()
         msg = (
             f"working: {js['threadpool.working']}/{js['threadpool.max']} "
             f"in {timing:.4f}s"
@@ -29,7 +29,7 @@ def main():
             f"timing={timing:.4f};10;5;3;"
         )
         return status
-    print(f"CRITICAL - /room/kdmx.xml returned code {req.status_code}")
+    print(f"CRITICAL - /status returned code {resp.status_code}")
     return 2
 
 

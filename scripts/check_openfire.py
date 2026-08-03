@@ -2,13 +2,13 @@
 
 import sys
 
-import httpx
+import requests
 
 
 def main() -> int:
     """Go Main Go"""
     try:
-        resp = httpx.get("http://xmpp.weather.im:7070")
+        resp = requests.get("http://xmpp.weather.im:7070")
         resp.raise_for_status()
     except Exception as exp:
         print(f"FATAL - {exp}")
