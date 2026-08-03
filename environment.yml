@@ -7,3 +7,4 @@ dependencies:
   - pytest
   - requests
   - rrdtool
+  - setuptools_scm
