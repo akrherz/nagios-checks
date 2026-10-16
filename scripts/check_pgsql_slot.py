@@ -45,48 +45,48 @@ def parse_args():
 def fetch_slot_metrics(conn: Connection, args) -> dict:
     """Query the database and get the result."""
 
-    try:
-        # Query combining pg_replication_slots and pg_stat_replication
-        query = """
-            SELECT 
-                s.slot_name,
-                s.active,
-                s.wal_status,
-                s.plugin,
-                COALESCE(pg_wal_lsn_diff(pg_current_wal_lsn(),
-                s.restart_lsn), 0)::bigint AS byte_lag,
-                COALESCE(pg_wal_lsn_diff(pg_current_wal_lsn(),
-                s.confirmed_flush_lsn), 0)::bigint AS confirmed_flush_lag,
-                r.state AS replication_state,
-                r.sync_state,
-                COALESCE(pg_wal_lsn_diff(
-                    pg_current_wal_lsn(), r.write_lsn), 0)::bigint
-                    AS write_lag,
-                COALESCE(
-                    pg_wal_lsn_diff(pg_current_wal_lsn(),
-                    r.flush_lsn), 0)::bigint AS flush_lag,
-                COALESCE(pg_wal_lsn_diff(
-                    pg_current_wal_lsn(), r.replay_lsn), 0)::bigint
-                    AS replay_lag
-            FROM pg_replication_slots s
-            LEFT JOIN pg_stat_replication r ON s.active_pid = r.pid
-            WHERE s.slot_name = :slot;
-        """
-        res = conn.execute(sql_helper(query), {"slot": args.slot})
-        row = res.mappings().fetchone()
-        return row
-    except Exception as e:
-        print(f"CRITICAL - Database connection or query failed: {str(e)}")
-        sys.exit(CRITICAL)
+    # Query combining pg_replication_slots and pg_stat_replication
+    query = """
+        SELECT
+            s.slot_name,
+            s.active,
+            s.wal_status,
+            s.plugin,
+            COALESCE(pg_wal_lsn_diff(pg_current_wal_lsn(),
+            s.restart_lsn), 0)::bigint AS byte_lag,
+            COALESCE(pg_wal_lsn_diff(pg_current_wal_lsn(),
+            s.confirmed_flush_lsn), 0)::bigint AS confirmed_flush_lag,
+            r.state AS replication_state,
+            r.sync_state,
+            COALESCE(pg_wal_lsn_diff(
+                pg_current_wal_lsn(), r.write_lsn), 0)::bigint
+                AS write_lag,
+            COALESCE(
+                pg_wal_lsn_diff(pg_current_wal_lsn(),
+                r.flush_lsn), 0)::bigint AS flush_lag,
+            COALESCE(pg_wal_lsn_diff(
+                pg_current_wal_lsn(), r.replay_lsn), 0)::bigint
+                AS replay_lag
+        FROM pg_replication_slots s
+        LEFT JOIN pg_stat_replication r ON s.active_pid = r.pid
+        WHERE s.slot_name = :slot;
+    """
+    res = conn.execute(sql_helper(query), {"slot": args.slot})
+    row = res.mappings().fetchone()
+    return row
 
 
 def main():
     """Go Main Go."""
     args = parse_args()
-    with get_sqlalchemy_conn(
-        "postgres", host="localhost", user="postgres", rw=False
-    ) as conn:
-        data = fetch_slot_metrics(conn, args)
+    try:
+        with get_sqlalchemy_conn(
+            "postgres", host="localhost", user="postgres", rw=False
+        ) as conn:
+            data = fetch_slot_metrics(conn, args)
+    except Exception as e:
+        print(f"CRITICAL - Database connection or query failed: {str(e)}")
+        sys.exit(CRITICAL)
 
     if not data:
         print(f"CRITICAL - Replication slot '{args.slot}' does not exist")
@@ -115,8 +115,8 @@ def main():
         status = CRITICAL
         messages.append("Slot is INACTIVE (Standby disconnected)")
 
-    # 2. Check WAL status (e.g., lost, unreserved)
-    if wal_status and wal_status not in ("normal", "reserved"):
+    # 2. Check WAL status for WAL loss
+    if wal_status in ("unreserved", "lost"):
         status = CRITICAL
         messages.append(f"WAL status is '{wal_status}'")
 
@@ -143,10 +143,10 @@ def main():
         print(f"OK - {summary_text} {perfdata}")
         sys.exit(OK)
     elif status == WARNING:
-        print(f"WARNING - {', '.join(messages)} | {summary_text} {perfdata}")
+        print(f"WARNING - {', '.join(messages)} - {summary_text} {perfdata}")
         sys.exit(WARNING)
     else:
-        print(f"CRITICAL - {', '.join(messages)} | {summary_text} {perfdata}")
+        print(f"CRITICAL - {', '.join(messages)} - {summary_text} {perfdata}")
         sys.exit(CRITICAL)
 
 
