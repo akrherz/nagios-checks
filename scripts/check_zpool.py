@@ -39,12 +39,16 @@ def main(argv) -> int:
     data = dict(zip(columns, tokens))
     stats = []
     for key, val in data.items():
-        if key == "pool" or val == "-":
+        if key == "pool":
             continue
+        # zpool emits "-" for no data; keep a stable set of perfdata fields
+        # as pnp4nagios RRDs are positional.
+        if val == "-":
+            val = "0"
         units = ""
         if key in ["alloc", "free", "read_bytes", "write_bytes"]:
             units = "B"
-        stats.append(f"{key}={data[key]}{units};;")
+        stats.append(f"{key}={val}{units};;")
     freeGB = int(data["free"]) // 1_000_000_000
     msg = f"OK - zpool {pool} free: {freeGB}GB | {' '.join(stats)}"
     print(msg)
