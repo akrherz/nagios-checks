@@ -27,24 +27,27 @@ def main(argv) -> int:
         "pool alloc free read_ops write_ops read_bytes write_bytes "
         "total_wait_read total_wait_write disk_wait_read disk_wait_write "
         "syncq_wait_read syncq_wait_write asyncq_wait_read asyncq_wait_write "
-        "scrub_wait_read scrub_wait_write trim_wait rebuild_wait "
+        "scrub_wait_read trim_wait_write rebuild_wait_read "
         "syncq_read_pend syncq_read_active "
         "syncq_write_pend syncq_write_active "
         "asyncq_read_pend asyncq_read_active "
         "asyncq_write_pend asyncq_write_active "
         "scrubq_read_pend scrubq_read_active "
-        "trimq_read_pend trimq_read_active "
+        "trimq_write_pend trimq_write_active "
         "rebuildq_read_pend rebuildq_read_active"
     ).split()
+    if len(tokens) != len(columns):
+        print(f"UNKNOWN - expected {len(columns)} columns, got {len(tokens)}")
+        return 3
     data = dict(zip(columns, tokens))
     stats = []
     for key, val in data.items():
         if key == "pool":
             continue
-        # zpool emits "-" for no data; keep a stable set of perfdata fields
-        # as pnp4nagios RRDs are positional.
+        # zpool emits "-" for no data; "U" (unknown) keeps the perfdata
+        # field set stable, as pnp4nagios RRDs are positional.
         if val == "-":
-            val = "0"
+            val = "U"
         units = ""
         if key in ["alloc", "free", "read_bytes", "write_bytes"]:
             units = "B"
