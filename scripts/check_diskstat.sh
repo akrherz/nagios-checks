@@ -325,7 +325,7 @@ for i in ${TPS} ${BYTES_READ_PER_SEC} ${BYTES_WRITTEN_PER_SEC} \
 do
     [[ $i -lt 0 ]] && {
         echo "Negative values, skipping this round."
-        exit $E_UNKNOWN
+        exit $E_OK
     }
 done
 
