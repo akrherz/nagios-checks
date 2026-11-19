@@ -30,14 +30,19 @@ def read_stats():
         return json.load(fp)
 
 
-def main():
+def main(argv: list[str]):
     """Go Main Go."""
+    port = 80
+    if len(argv) > 1:
+        port = int(argv[1])
     try:
         last = read_stats()
     except Exception:
         last = None
     try:
-        resp = requests.get("http://localhost:8080/nginx_status", timeout=30)
+        resp = requests.get(
+            f"http://localhost:{port}/nginx_status", timeout=30
+        )
         resp.raise_for_status()
     except Exception as exp:
         print(f"CRITICAL - {exp}")
@@ -62,9 +67,9 @@ def main():
     if last is None:
         print("OK - first run")
         return 0
-    diff = present["timestamp"] - last["timestamp"]
-    dh = int(present["handled"]) - int(last["handled"])
-    dr = int(present["requests"]) - int(last["requests"])
+    diff = max(1, present["timestamp"] - last["timestamp"])
+    dh = max(0, int(present["handled"]) - int(last["handled"]))
+    dr = max(0, int(present["requests"]) - int(last["requests"]))
     print(
         f"nginx |connections={present['connections']};;;; "
         f"reading={present['reading']};;;; "
@@ -77,4 +82,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv))
